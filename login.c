@@ -21,7 +21,15 @@ void login ( lista_user * );
 
 lista_user * signin ( lista_user * );
 
+//non ho commentato tutte le linee di codice, perchè mi scocciavo 
+//comunque nel riassunto ho pensato a questa idea che non ho ancora completato 
+//allora se notate nel signin ritorno una variabile di tipo ( lista_user * ) perchè
+//li ovviamente modifico la lista che ho preso dal file utenti.txt che successivamente
+//utilizzero' per andare a fare il login... il login e' di tipo void ma lo voglio modificare
+//affinche mi returni una variabile di tipo ( lista_user ) cosi che mi ritorni il dato struct
+//che ci fara' accedere alla zona deliver, ok buonaserata io mi vado a drograre
 
+//ah inoltre devo modificare la funzione getpassword per farla in modo ricorsivo ma adesso non mi va
 
 int main(void)
 {
@@ -34,6 +42,7 @@ int main(void)
 
     return 0;
 }
+
 
 lista_user * signin ( lista_user * head )
 {
