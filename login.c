@@ -19,40 +19,74 @@ void get_password(char *, int);
 
 void login ( lista_user * );
 
-void signin ( void );
+lista_user * signin ( lista_user * );
 
 
 
 int main(void)
 {
+
     lista_user * head = preleva_dati_da_file ( fopen("utenti.txt","r") );
 
-    login( head );
+    head = signin ( head );
 
-    lista_user * nodo = (lista_user *) malloc ( sizeof (lista_user) );   
-
-    strcpy(nodo->targaID,"adolf");
-    strcpy(nodo->password,"hitler");
-    strcpy(nodo->name_user,"3reich");
-    strcpy(nodo->surname_user ,"ww2");
-    nodo->carico_veivolo = 19;
-    nodo->peso_veicolo = 39;
-    nodo->next = NULL;
-
-    head = add_node ( head, nodo);
-
-    print_lista_user ( head );
-
+    login ( head );
 
     return 0;
 }
 
-void signin ( )
+lista_user * signin ( lista_user * head )
 {
-    char user_id[FIELD_SIZE];  //user id
-    char password[FIELD_SIZE]; //password
-}
 
+    lista_user * info_user = ( lista_user * ) malloc ( sizeof (lista_user ));
+
+    printf("\n\n\t\t\tUser ID: ");
+    fflush( stdout );
+    
+    scanf("%s", info_user->targaID);
+
+    to_lower(info_user->targaID);
+
+    system("cls");
+
+    while( check_nodo_ID ( head , info_user->targaID ))
+    {
+        printf("\n\n\t\t\tUser already taken: ");
+        fflush( stdout );
+
+        scanf("%s", info_user->targaID);
+
+        to_lower(info_user->targaID);
+
+        system("cls");
+    }
+
+    printf("\n\n\t\t\tName: ");
+    scanf("%s",info_user->name_user);
+
+    system("cls");
+    
+    printf("\n\n\t\t\tSurname : ");
+    scanf("%s",info_user->surname_user);
+
+    system("cls");
+
+    double_password( info_user->password );
+
+    system("cls");
+
+    printf("\n\n\t\t\tPeso camion: ");
+    fflush( stdout );
+
+    scanf("%d",&info_user->peso_veicolo);
+    info_user->carico_veivolo = 0;
+
+    info_user->next = NULL;
+
+
+    return add_node( head , info_user );
+
+}
 
 void login ( lista_user * head )
 {
@@ -80,13 +114,6 @@ void login ( lista_user * head )
     else
         printf("\n\n\t\tINVALID USER\n");
 
-}
-
-int is_authorized(const char *user_id, const char *pwd) 
-{
-
-
-    return 0;
 }
 
 void get_password(char *password, int size)
@@ -131,34 +158,41 @@ void to_lower(char *stringa) //una tolower scritta a mano
 }
 
 
-void double_password(char *stringa)
+void double_password(char *password)
 {
-    char tmp_stringa[FIELD_SIZE];
+    char tmp_password[FIELD_SIZE];
 
-    get_password(tmp_stringa, sizeof tmp_stringa);
+    printf("\n\n\t\t\tPassword: ");
+    fflush( stdout );
 
-    if (!strcmp(tmp_stringa, "back"))
+    get_password(tmp_password, FIELD_SIZE);
+
+    if (!strcmp(tmp_password, "back"))
     {
-        strcpy(stringa, "back");
+        strcpy(password, "back");
         return;
     }
 
-    get_password(stringa, sizeof stringa);
+    printf("\n\n\t\t\tPassword: ");
+    fflush( stdout );
 
-    if (!strcmp(stringa, "back"))
+    get_password(password, FIELD_SIZE);
+
+    if (!strcmp(password, "back"))
     {
         return;
     }
 
-    if (!strcmp(tmp_stringa, stringa))
+    if (!strcmp(tmp_password, password))
         return;
     else
     {
         system("cls");
 
-        printf("\n\t\t\tLe password !%s! !%s! non combaciano riprova\n", tmp_stringa, stringa);
-        free(tmp_stringa);
+        printf("\n\t\t\tLe password !%s! !%s! non combaciano riprova\n", tmp_password, password);
+        fflush(stdout);
+        
+        double_password(password);
     }
 
-    double_password(stringa);
 }
