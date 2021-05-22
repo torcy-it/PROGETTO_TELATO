@@ -5,78 +5,83 @@
 #include <stdbool.h>
 #include "hlista.h"
 
+
 lista_user * preleva_dati_da_file( FILE * fp )
 {
 
-    if(!fp) //eseguo un controllo per vedere se il file e' stato aperto correttamente
+    if(!fp) //controllo apertura file
     {   
         printf("\nErrore scrittura ospite FILE appuntamenti\n"); 
-        return NULL;
+        return NULL; // return testa NULL
     }
 
-    lista_user * nodo_t = (lista_user *) malloc(sizeof(lista_user)); //alloco memoria per il nodo
-
+    lista_user * nodo_t = (lista_user *) malloc(sizeof(lista_user)); //mallocamento nodo della lista
+    
+    
+    //controllo variabili in entrata == 6
     //caso base                       TARGA                PASSWORD               NOME              COGNOME               PESO                   CARICO
     if(fscanf(fp,"%s %s %s %s %d %d", nodo_t->targaID, nodo_t->password , nodo_t->name_user  , nodo_t->surname_user, &nodo_t->peso_veicolo, &nodo_t->carico_veivolo) != 6) 
     {
-        fclose( fp ); // chiudo il file
+        fclose( fp ); // chiusura file
         
-        free ( nodo_t ); //libero il nodo allocato in precendenza 
+        free ( nodo_t ); //free nodo non più utilizzabile
 
-        return NULL; // e ritorno null quindi lo stack si chiudera' dando come ultimo elemento un nodo a NULL
+        return NULL; // return coda della lista a NULL, chiusura stack
     }
     
+    //inserimento nodo_t nello stack
     // caso ricorsivo
-    nodo_t->next = preleva_dati_da_file(fp);
-
+    nodo_t->next = preleva_dati_da_file( fp );
+    
+    //return nodo_t nello stack
     return nodo_t;
 
 }
 
 bool check_nodo_ID ( lista_user * head , const char * targaID)
 {
-    if( !head )         //caso base dove head e' NULL e ritorno false perche' non ho trovato nessuna corrispondenza
+    if( !head )         //caso base head e' NULL, nessuna corrispondenza trovata, return false trovato nessuna corrispondenza
         return false;
     
-    if(!strcmp ( head->targaID, targaID )) // ho trovato una corrispondenza ritorno true
+    if(!strcmp ( head->targaID, targaID )) //trovato corrispondenza return true
         return true; 
 
-    check_nodo_ID (head->next , targaID); // caso ricorsivo dove scorro head
+    check_nodo_ID (head->next , targaID); //scorrimento lista
 }
 
 
 bool check_nodo_KEY ( lista_user * head , const char * targaID, const char * password )
 {
-    if( !head )      //caso base dove head e' NULL e ritorno false perche' non ho trovato nessuna corrispondenza
+    if( !head )      //caso base head e' NULL, nessuna corrispondenza trovata, return false trovato nessuna corrispondenza
         return false;
     
-    if( !strcmp ( head->targaID, targaID ) && !strcmp ( head->password, password) ) // ho trovato una corrispondenza ritorno true
+    if( !strcmp ( head->targaID, targaID ) && !strcmp ( head->password, password) )//trovato corrispondenza return true
         return true; 
 
-    check_nodo_KEY (head->next , targaID, password); //caso ricorsivo dove scorro head
+    check_nodo_KEY (head->next , targaID, password); //scorrimento lista
 }
 
 
 lista_user * add_node ( lista_user * head, lista_user * info_new_user )
 {
-    if( !head )
+    if( !head )      //caso base head e' NULL aggiungo nodo 
         return info_new_user;
 
-    head->next = add_node ( head->next , info_new_user );
+    head->next = add_node ( head->next , info_new_user ); // scorrimento lista
 
-    return head;
+    return head; // return collegamento head
 }
 
 
 void deallocate_list ( lista_user * head )
 {
-   if ( !head ) return; //checks if head is null 
+   if ( !head ) return; //caso base head e' NULL conclusione lista
 
    lista_user * next = head->next; //faccio una copia del next cosi da non perdere il riferimento dopo aver deallocato
 
-   free( head );
+   free( head ); //free head
 
-   deallocate_list( next );   
+   deallocate_list( next );   //caso ricosivo utilizzo "next" come rifeirmento alla testa
 }
 
 void print_lista_user ( lista_user * head )
