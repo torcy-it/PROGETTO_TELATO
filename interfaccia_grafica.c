@@ -18,17 +18,17 @@ void stampa_titolo_programma()
 void stampa_nome_schermata(char nome_schermata[30])
 {
     printf("\n");
-    // Se il nome della schermata è menù principale
+    // Se il nome della schermata Ã¨ menÃ¹ principale
     if (strcmp(nome_schermata,"Men\xA3 principale")==0){
         printf("             \xFE %s \xFE\n",nome_schermata);
     }
 
-    // Se il nome della schermata è schermata login
+    // Se il nome della schermata Ã¨ schermata login
     if (strcmp(nome_schermata,"Schermata Login")==0){
         printf("             \xFE %s \xFE\n",nome_schermata);
     }
 
-    // Se il nome della schermata è schermata registrazione
+    // Se il nome della schermata Ã¨ schermata registrazione
     if (strcmp(nome_schermata,"Schermata Registrazione")==0){
         printf("         \xFE %s \xFE\n",nome_schermata);
     }
@@ -36,7 +36,7 @@ void stampa_nome_schermata(char nome_schermata[30])
 }
 
 // SCHERMATA LOGIN
-// Viene aperta dal menù principale tramite l'operazione LOGIN
+// Viene aperta dal menÃ¹ principale tramite l'operazione LOGIN
 void schermata_login()
 {
     // Operazione digitata dall'utente
@@ -69,7 +69,7 @@ void schermata_login()
 }
 
 // SCHERMATA REGISTRAZIONE
-// Viene aperta dal menù principale tramite l'operazione REG
+// Viene aperta dal menÃ¹ principale tramite l'operazione REG
 void schermata_registrazione()
 {
         // Operazione digitata dall'utente
