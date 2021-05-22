@@ -8,6 +8,7 @@
 
 #define FIELDSIZE 25
 
+// lista singolarmente linkata 
 typedef struct lista
 {  
     char targaID [FIELDSIZE];
@@ -23,17 +24,22 @@ typedef struct lista
 
 }lista_user;
 
+//creazione della lista tramite file utenti.txt
+lista_user * preleva_dati_da_file( FILE * ); 
 
-lista_user * preleva_dati_da_file( FILE * ); //creo una lista degli user tramite la lettura del file
-
+//scorrimento della lista per trovare ID user
 bool check_nodo_ID ( lista_user *,const char * ); 
 
+//scorrimento della per trovare KEY e ID user
 bool check_nodo_KEY ( lista_user * , const char *, const char *);
 
+//aggiungimento nodo in coda alla lista
 lista_user * add_node ( lista_user *, lista_user * );
 
+//deallocamento della lista utenti con eventuale aggiornamento sul file utenti.txt
 void deallocateList ( lista_user *);
 
+//stampa della lista
 void print_lista_user ( lista_user * );
 
 #endif
