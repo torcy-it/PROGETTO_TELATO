@@ -7,4 +7,4 @@ NOTE
 con getch le freccette hanno come intero 072 e cosi via
 
 volendo le funzione to_upper e insert_int potrebbe essere messe in una libreria apparte
-"funzioni per codice migliore" sti fatti qua
+"funzioni_conio" sti fatti qua
