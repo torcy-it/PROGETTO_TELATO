@@ -6,6 +6,7 @@
 #include <string.h>
 #include <stdbool.h>
 
+//variabile globale per dimensione array
 #define FIELDSIZE 25
 
 // lista singolarmente linkata 
