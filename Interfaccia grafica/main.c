@@ -19,31 +19,31 @@ void stampa_titolo_programma()
 void stampa_nome_schermata(char nome_schermata[30])
 {
     printf("\n");
-    // Se il nome della schermata è menù principale
+    // Se il nome della schermata Ã¨ menÃ¹ principale
     if (strcmp(nome_schermata,"Men\xA3 principale")==0)
     {
         printf("             \xFE %s \xFE\n",nome_schermata);
     }
 
-    // Se il nome della schermata è schermata login
+    // Se il nome della schermata Ã¨ schermata login
     if (strcmp(nome_schermata,"Schermata Login")==0)
     {
         printf("             \xFE %s \xFE\n",nome_schermata);
     }
 
-    // Se il nome della schermata è schermata registrazione
+    // Se il nome della schermata Ã¨ schermata registrazione
     if (strcmp(nome_schermata,"Schermata Registrazione")==0)
     {
         printf("          \xFE %s \xFE\n",nome_schermata);
     }
 
-    // Se il nome della schermata è schermata driver
+    // Se il nome della schermata Ã¨ schermata driver
     if (strcmp(nome_schermata,"Schermata Driver")==0)
     {
         printf("             \xFE %s \xFE\n",nome_schermata);
     }
 
-    // Se il nome della schermata è schermata carico
+    // Se il nome della schermata Ã¨ schermata carico
     if (strcmp(nome_schermata,"Schermata Carico")==0)
     {
         printf("             \xFE %s \xFE\n",nome_schermata);
@@ -63,7 +63,7 @@ void gotoxy(int x, int y)
 }
 
 // SCHERMATA LOGIN
-// Viene aperta dal menù principale tramite l'operazione LOGIN
+// Viene aperta dal menÃ¹ principale tramite l'operazione LOGIN
 void schermata_login()
 {
     char operazione[50];   // Operazione digitata dall'utente
@@ -115,7 +115,7 @@ void schermata_login()
 }
 
 // SCHERMATA REGISTRAZIONE
-// Viene aperta dal menù principale tramite l'operazione REG
+// Viene aperta dal menÃ¹ principale tramite l'operazione REG
 void schermata_registrazione()
 {
     // Operazione digitata dall'utente
@@ -199,8 +199,8 @@ void schermata_driver()
         stampa_titolo_programma();
         stampa_nome_schermata("Schermata Driver");
         printf("\tBenvenuto Nome Cognome\n"); //Nome e Cognome saranno sostituiti dai campi nome e cognome del nodo driver
-        printf("\tPeso camion: 50\n");  //50 sarà sostituito dal campo peso_camion del nodo driver
-        printf("\tPeso carico: 0\n");   //0 sarà sostituito dal campo peso_carico del nodo driver
+        printf("\tPeso camion: 50\n");  //50 sarÃ  sostituito dal campo peso_camion del nodo driver
+        printf("\tPeso carico: 0\n");   //0 sarÃ  sostituito dal campo peso_carico del nodo driver
         printf("\t\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4");
         printf("\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\n");
         printf("\t[CARICO] - Gestione carico\n");
@@ -210,39 +210,31 @@ void schermata_driver()
         scanf("%s",operazione);
 
         // Controllo errore sull'operazione digitata dall'utente
-        while(strcmp(operazione,"CARICO") !=0 && strcmp(operazione,"TOMTOM") !=0 && strcmp(operazione,"LOGOUT") !=0 )
-        {
-            system("cls");
-            stampa_titolo_programma();
-            stampa_nome_schermata("Schermata Driver");
-            printf("\tBenvenuto Nome Cognome\n"); //Nome e Cognome saranno sostituiti dai campi nome e cognome del nodo driver
-            printf("\tPeso camion: 50\n");  //50 sarà sostituito dal campo peso_camion del nodo driver
-            printf("\tPeso carico: 0\n");   //0 sarà sostituito dal campo peso_carico del nodo driver
-            printf("\t\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4");
-            printf("\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\xC4\n");
-            printf("\t[CARICO] - Gestione carico\n");
-            printf("\t[TOMTOM] - Richiedi indicazioni\n");
-            printf("\t[LOGOUT] - Esegui il logout\n");
-
-            printf("\n\n Errore. Comando non riconosciuto.\n");
-            printf(" Digitare l'operazione desiderata: ");
-            scanf("%s",operazione);
-        }
 
         if(strcmp(operazione,"CARICO") == 0)
         {
             schermata_carico();
-        }
 
-        if(strcmp(operazione,"TOMTOM") == 0)
+        }
+        else if(strcmp(operazione,"TOMTOM") == 0)
         {
             printf("\n Qui vanno le funzioni di Francesco...\n");
             sleep(2);
         }
+        else if ( !strcmp(operazione,"LOGOUT") )
+        {
+            printf("\n Logout in corso...");
+            sleep(2);
+            break;
+        }
+        else
+        {
+            system("cls");
+            printf("\n\n Errore. Comando non riconosciuto.\n ");
+            system("pause");
+        }
 
-    }while (strcmp(operazione,"LOGOUT") != 0);
-    printf("\n Logout in corso...");
-    sleep(2);
+    }while (1);
 }
 
 // MAIN - MENU' PRINCIPALE
