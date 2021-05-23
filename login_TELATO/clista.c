@@ -73,15 +73,28 @@ lista_user * add_node ( lista_user * head, lista_user * info_new_user )
 }
 
 
-void deallocate_list ( lista_user * head )
+void aggiona_dati_su_file ( lista_user * head , FILE * fp )
 {
-   if ( !head ) return; //caso base head e' NULL conclusione lista
 
-   lista_user * next = head->next; //faccio una copia del next cosi da non perdere il riferimento dopo aver deallocato
+    if(!fp) //eseguo un controllo per vedere se il file e' stato aperto correttamente
+    {   
+        printf("\nErrore scrittura ospite FILE appuntamenti\n"); 
+        return ;
+    }
 
-   free( head ); //free head
+    if ( !head ) 
+    {
+        fclose ( fp );
+        return; //checks if head is null 
+    }
 
-   deallocate_list( next );   //caso ricosivo utilizzo "next" come rifeirmento alla testa
+    lista_user * next = head->next; //faccio una copia del next cosi da non perdere il riferimento dopo aver deallocato
+    
+    fprintf(fp,"\n%s %s %s %s %d %d", head->targaID, head->password , head->name_user  , head->surname_user, head->peso_veicolo, head->carico_veivolo);
+
+    free( head );
+
+    aggiona_dati_su_file( next , fp );   
 }
 
 void print_lista_user ( lista_user * head )
