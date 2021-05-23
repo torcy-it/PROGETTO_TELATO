@@ -38,7 +38,7 @@ bool check_nodo_KEY ( lista_user * , const char *, const char *);
 lista_user * add_node ( lista_user *, lista_user * );
 
 //deallocamento della lista utenti con eventuale aggiornamento sul file utenti.txt
-void deallocateList ( lista_user *);
+void aggiona_dati_su_file ( lista_user *  , FILE *  );
 
 //stampa della lista
 void print_lista_user ( lista_user * );
