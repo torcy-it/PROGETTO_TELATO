@@ -69,4 +69,5 @@ void interfaccia_1_0 ( )
     //se indice è uguale a 1 vai in sigin 
     //se è uguale a 2 vai in exit
     
+    
 }
