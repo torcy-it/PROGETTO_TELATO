@@ -7,22 +7,27 @@
 #define FIELD_SIZE 20
 #define INIT 4
 
-    // Structure to represent a min heap node
-    struct MinHeapNode
-    {
-        int  v;
-        int dist;
-    };
-    
-    // Structure to represent a min heap
-    struct MinHeap
-    {
-        int size;      // Number of heap nodes present currently
-        int capacity;  // Capacity of min heap
-        int *pos;     // This is needed for decreaseKey()
-        struct MinHeapNode **array;
-    };
-  
+
+// internet function to x to y
+
+//x
+// Structure to represent a min heap node
+struct MinHeapNode
+{
+	int  v;
+	int dist;
+};
+
+// Structure to represent a min heap
+struct MinHeap
+{
+	int size;      // Number of heap nodes present currently
+	int capacity;  // Capacity of min heap
+	int *pos;     // This is needed for decreaseKey()
+struct MinHeapNode **array;
+};
+//y
+
     struct archi
     {
         int key;
@@ -39,7 +44,7 @@
     };
     typedef struct graph * grafo;
 
-
+//x
 struct MinHeap* createMinHeap(int );
 struct MinHeapNode* newMinHeapNode(int , int );
 void swapMinHeapNode(struct MinHeapNode** , struct MinHeapNode** );
@@ -50,7 +55,7 @@ void decreaseKey(struct MinHeap* , int , int );
 bool isInMinHeap(struct MinHeap *, int );
 void printArr(int [], int );
 void dijkstra( grafo  , int );
-
+//y
 
 
     void print_archi ( arco  );
@@ -212,7 +217,7 @@ void print_archi ( arco head )
     print_archi ( head->next);
 }
 
-
+//x
 // A utility function to create a new Min Heap Node
 struct MinHeapNode* newMinHeapNode(int v, int dist)
 {
@@ -415,7 +420,7 @@ void dijkstra( grafo gr, int src)
     // print the calculated shortest distances
     printArr(dist, V);
 }
-
+//y
 
 /*
 // DFS algo
