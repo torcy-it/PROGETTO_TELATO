@@ -3,8 +3,9 @@
 #include <stdio.h>
 #include <string.h>
 #include <conio.h>
-
 #include "hlista.h"
+#include "hour_function.h"
+#include <time.h>
 
 #define FIELD_SIZE 25
 
@@ -146,8 +147,11 @@ int insert_int ( )
     {
         if ( ch < 48 || ch > 57) //controllo se il carattere e' contenuto nel range dell'asci 48 to 57
         {
-            
-            if ( ch == '\b' &&   numero %10 != 0  ) //se non sono stati inseriti dei caratteri nell'array allora non cancellare 
+            if( ch == '\b' &&   numero %10 == 0 )
+            {
+                printf("\b%c\b",' ');
+            }
+            else if ( ch == '\b' &&   numero %10 != 0  ) //se non sono stati inseriti dei caratteri nell'array allora non cancellare 
             {                               
                 printf("\b%c\b",' ');
 
@@ -166,11 +170,126 @@ int insert_int ( )
 
         }
 
-        if ( (ch = getch()) == '\r' && numero %10 != 0 ) 
+        if ( (ch = getch()) == '\r' ) 
             break;
 
     }while( 1 );
 
     return numero;
     
+}
+
+
+lista * signin ( lista * head )
+{
+
+    lista * data_user = ( lista * ) malloc ( sizeof (lista ));
+
+    do
+    {
+        printf("\n\n\t\t\tUser ID: ");
+        fflush( stdout );
+
+        scanf("%s", data_user->info_user.targaID);
+
+        to_upper(data_user->info_user.targaID);
+
+        system("cls");
+
+    }while( check_nodo_ID ( head , data_user->info_user.targaID , false));
+
+
+    printf("\n\n\t\t\tName: ");
+    scanf("%s",data_user->info_user.name_user);
+
+    system("cls");
+    
+    printf("\n\n\t\t\tSurname : ");
+    scanf("%s",data_user->info_user.surname_user);
+
+    system("cls");
+
+    double_password( data_user->info_user.password );
+
+    system("cls");
+
+    printf("\n\n\t\t\tPeso camion: ");
+    fflush( stdout );
+
+    do 
+    {
+        data_user->info_user.peso_veicolo = insert_int ( );     
+
+    }while ( data_user->info_user.peso_veicolo > 0 );
+    
+    
+    data_user->info_user.carico_veivolo = 0;
+
+    data_user->next = NULL;
+
+    system("cls");
+
+    return add_node( head , data_user );
+
+}
+
+lista * login ( lista * head )
+{
+    lista * utente = ( lista *)malloc ( sizeof ( lista ));
+
+    printf("\n\n\t\t\tUser ID: ");
+    fflush(stdout);
+
+    scanf("%s", utente->info_user.targaID);
+
+    to_upper(utente->info_user.targaID);  
+
+    printf("\n\n\t\t\tPassword: ");
+    fflush(stdout);
+
+    get_password( utente->info_user.password , 0);
+
+    system("cls");
+
+    load_user ( head , utente ); 
+
+    utente->next = NULL;
+}
+
+
+void stampa_graphic_grafo( void )
+{
+    printf("\n\n");
+    printf("                    ___                   ___\n");
+    printf("                   /\xB0\xB1\xB0\\       100       /\xB0\xB1\xB0\\\n");
+    printf("                  |\xB0\xB1%c\xB1\xB0|---------------|\xB0\xB1%c\xB1\xB0|\n",'A','B');
+    printf("                   \\\xB0\xB1\xB0/                 \\\xB0\xB1\xB0/\n");
+    printf("                   /    \\               /    \\ \n");
+    printf("                  /      \\             /      \\ \n");
+    printf("                 /        \\           /        \\ \n");
+    printf("                /       50 \\         / 100      \\ \n");
+    printf("               /            \\       /            \\ \n");
+    printf("           40 /              \\     /              \\ 40\n");
+    printf("             /                \\   /                \\ \n");
+    printf("            /                 /\xB0\xB1\xB0\\                 \\ \n");
+    printf("           /                 |\xB0\xB1%c\xB1\xB0|                 \\ \n",'C');
+    printf("          /                   \\\xB0\xB1\xB0/                   \\ \n");
+    printf("         /         100        / | \\         60         \\ \n");
+    printf("      /\xB0\xB1\xB0\\------------------'  |  '------------------/\xB0\xB1\xB0\\      \n");
+    printf("     |\xB0\xB1%c\xB1\xB0|                  30|                    |\xB0\xB1%c\xB1\xB0|\n",'D','E');
+    printf("      \\\xB0\xB1\xB0/-----------------.   |   .-----------------\\\xB0\xB1\xB0/\n");
+    printf("         \\         100       \\  |  /       100         / \n");
+    printf("          \\                   /\xB0\xB1\xB0\\                   / \n");
+    printf("           \\                 |\xB0\xB1%c\xB1\xB0|                 / \n",'F');
+    printf("            \\                 \\\xB0\xB1\xB0/                 / \n");
+    printf("             \\                /   \\                /\n");
+    printf("           60 \\              /     \\              / 100\n");
+    printf("               \\            /       \\            /\n");
+    printf("                \\       40 /         \\ 90       /\n");
+    printf("                 \\        /           \\        /\n");
+    printf("                  \\      /             \\      /\n");
+    printf("                   \\    /               \\    /\n");
+    printf("                   /\xB0\xB1\xB0\\                 /\xB0\xB1\xB0\\      \n");
+    printf("                  |\xB0\xB1%c\xB1\xB0|---------------|\xB0\xB1%c\xB1\xB0|\n",'G','H');
+    printf("                   \\\xB0\xB1\xB0/       100       \\\xB0\xB1\xB0/\n");
 }
