@@ -45,17 +45,15 @@ typedef struct list
 
 }lista;
 
-
+void load_user (  lista *  , lista *  );
 
 lista * preleva_merce ( FILE * );
 
 lista * preleva_user ( FILE * );
 
-void aggiorna_merce_file ( lista *  );
-
 lista * preleva_dati_da_file( FILE * , bool ); //creo una lista degli user tramite la lettura del file
 
-bool check_nodo_ID ( lista *,const char * , bool ); 
+bool check_nodo_ID ( lista *, const char * , bool ); 
 
 bool check_nodo_KEY ( lista * , const char *, const char * );
 
@@ -74,5 +72,7 @@ lista *  mod_nodo_del (  lista *  , lista *  );
 lista * mod_nodo_add ( lista *  , lista* , bool  );
 
 void deallocate_list ( lista *);
+
+int somma_elementi_lista ( lista * );
 
 #endif

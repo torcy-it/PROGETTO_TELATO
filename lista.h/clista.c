@@ -4,8 +4,7 @@
 #include <string.h>
 #include <stdbool.h>
 #include "hlista.h"
-
-#include <time.h>
+#include "hour_function.h"
 
 lista * preleva_merce ( FILE * fp )
 {
@@ -71,7 +70,34 @@ lista * preleva_dati_da_file( FILE * fp , bool scelta )
 
 }
 
-bool check_nodo_ID ( lista * head , const char * stringa_to_find , bool scelta )
+void load_user (  lista * head , lista * utente )
+{
+    if ( !head )
+    {
+        utente->info_user.carico_veivolo = -84;
+
+        return ;
+    }
+    
+
+    if( ! strcmp( head->info_user.targaID, utente->info_user.targaID ) && ! strcmp( head->info_user.password , utente->info_user.password ) )
+    {
+        strcpy ( utente->info_user.name_user ,head->info_user.name_user );
+        strcpy ( utente->info_user.surname_user, head->info_user.surname_user);
+
+        utente->info_user.peso_veicolo = head->info_user.peso_veicolo;
+        utente->info_user.carico_veivolo = 0;
+
+        system("pause");
+        return;
+    }
+
+    load_user ( head->next, utente );
+
+}
+
+
+bool check_nodo_ID ( lista * head , const char * id_tofind , bool scelta )
 {
     if( !head )         //caso base dove head e' NULL e ritorno false perche' non ho trovato nessuna corrispondenza
     {
@@ -80,16 +106,17 @@ bool check_nodo_ID ( lista * head , const char * stringa_to_find , bool scelta )
 
     if( !scelta )
     {
-        if(!strcmp ( head->info_user.targaID, stringa_to_find )) // ho trovato una corrispondenza ritorno true
-            return true;         
+        if(!strcmp ( head->info_user.targaID, id_tofind  )) // ho trovato una corrispondenza ritorno true
+            return true;   
+                
     }
     else
     {
-        if(!strcmp ( head->info_merce.alimento, stringa_to_find ) ) // ho trovato una corrispondenza ritorno true
+        if(!strcmp ( head->info_merce.alimento, id_tofind ) ) // ho trovato una corrispondenza ritorno true
             return true;          
     }
 
-    check_nodo_ID (head->next , stringa_to_find, scelta ); // caso ricorsivo dove scorro head
+    check_nodo_ID (head->next , id_tofind , scelta ); // caso ricorsivo dove scorro head
 }
 
 
@@ -131,14 +158,12 @@ void aggiorna_user_su_file ( lista * head , FILE * fp )
         return; //checks if head is null 
     }
 
-    lista * next = head->next; //faccio una copia del next cosi da non perdere il riferimento dopo aver deallocato
-    
     fprintf(fp,"\n%s %s %s %s %d %d", head->info_user.targaID, head->info_user.password , head->info_user.name_user  , 
                                     head->info_user.surname_user, head->info_user.peso_veicolo, head->info_user.carico_veivolo);
 
-    free( head );
 
-    aggiorna_user_su_file( next , fp );   
+
+    aggiorna_user_su_file(head-> next , fp );   
 }
 
 
@@ -153,39 +178,6 @@ void print_lista_merce ( lista * head )
     print_lista_merce ( head->next);
 }
 
-
-void aggiorna_merce_file ( lista * head )
-{
-    time_t t;
-    lista * next = NULL;
-    FILE * fp = fopen ("stock_merce.txt","w");
-
-    if (!fp)
-    {
-        printf("\n\n\tERRORE nella scrittura file stock alimento\n");
-        return;
-    }
-
-    int max_colle = 100;
-
-    int max_peso = 20;
-
-    srand((unsigned) time(&t));
-
-    do
-    {
-        fprintf(fp,"%s %d %d", head->info_merce.alimento, rand() % max_colle, rand( )% max_peso);
-
-        next = head->next;
-
-        free( head );
-
-        head = next;
-
-    }while( !head );
-
-    fclose(fp);
-}
 
 lista * mod_nodo_add ( lista * head , lista* add, bool found )
 {
@@ -282,6 +274,7 @@ lista * crea_nodo_merce ( lista * head )
     {
         printf("\n\n\tInserisci alimento presente in lista merce\n>");
         scanf("%s",nodo.info_merce.alimento);
+        to_upper( nodo.info_merce.alimento);
 
     } while ( !check_nodo_ID ( head , nodo.info_merce.alimento, true )  || !strcmp (nodo.info_merce.alimento,"back" ));
 
@@ -289,9 +282,17 @@ lista * crea_nodo_merce ( lista * head )
     do
     {
         printf("\n\n\tInserisci la quantita desiderata \n>");
-        scanf("%d",&nodo.info_merce.colle);
+        nodo.info_merce.colle = insert_int ();
 
-    }while ( !check_quantita_merce ( head, &nodo ) || !strcmp (nodo.info_merce.alimento,"back" ) ); 
+        if( nodo.info_merce.colle > 0 )
+        {
+            if ( check_quantita_merce ( head, &nodo ) )
+            {
+                break;
+            }
+        }
+
+    }while ( 1 ); 
 
     strcpy (nodo_toLink->info_merce.alimento, nodo.info_merce.alimento);
 
@@ -311,10 +312,10 @@ bool check_quantita_merce ( lista * head, lista * nodo_to_check )
     {
         return false;
     }
-
+   
 
     if(!strcmp ( head->info_merce.alimento, nodo_to_check->info_merce.alimento ) 
-                && nodo_to_check->info_merce.colle >= 0 && nodo_to_check->info_merce.colle <= head->info_merce.colle ) // ho trovato una corrispondenza ritorno true
+                && nodo_to_check->info_merce.colle > 0 && nodo_to_check->info_merce.colle <= head->info_merce.colle ) // ho trovato una corrispondenza ritorno true
     {
         nodo_to_check->info_merce.peso = head->info_merce.peso;
         return true;          
@@ -325,11 +326,22 @@ bool check_quantita_merce ( lista * head, lista * nodo_to_check )
 
 void deallocate_list ( lista * head )
 {
-    if( !head ) return ;
+    if ( !head )
+    {
+        return;
+    }
+        
+    deallocate_list(head->next); 
 
-    lista * next = head->next;
+    free(head);
+}
 
-    free( head );
+int somma_elementi_lista ( lista * testa )
+{
 
-    deallocate_list ( next );
+    if ( testa != NULL )
+        return ((testa->info_merce.peso * testa->info_merce.colle ) + somma_elementi_lista(testa->next));
+    else
+        return 0;
+
 }
