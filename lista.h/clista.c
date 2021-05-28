@@ -394,37 +394,53 @@ lista *  mod_nodo_del ( lista * head , lista * del )
 }
 
 // CREA NODO MERCE
+// Crea un nodo da aggiungere alla lista della spesa
 lista * crea_nodo_merce ( lista * head )
 {
+    // Dichiara un nodo
     lista nodo;
+    // Alloca un nodo nodo_toLink
     lista * nodo_toLink = (lista * )malloc ( sizeof ( lista ));
 
+    // Esegui
     do
     {
+        // Chiedi all'utente di inserire un alimento in stock / presente nella lista merce
         printf("\n\n\tInserisci alimento presente in lista merce\n>");
+        // Ottieni l'input dall'utente
         scanf("%s",nodo.info_merce.alimento);
+        // Converti l'input in maiuscolo
         to_upper( nodo.info_merce.alimento);
-
+    
+    // Finché l'alimento non risulta presente o non si seleziona l'opzione back
     } while ( !check_nodo_ID ( head , nodo.info_merce.alimento, true )  || !strcmp (nodo.info_merce.alimento,"back" ));
 
-
+    // Esegui
     do
     {
-        printf("\n\n\tInserisci la quantita desiderata \n>");
+        // Richiedi all'utente di digitare la quantità desiderata
+        printf("\n\n\tInserisci la quantita' desiderata \n>");
+        // Permetti solo l'inserimento di interi tramite insert_int()
         nodo.info_merce.colle = insert_int ();
 
+        // Se il numero dei colli è positivo
         if( nodo.info_merce.colle > 0 )
         {
+            // Se la quantita' della merce
             if ( check_quantita_merce ( head, &nodo ) )
             {
+                // Esci dal ciclo
                 break;
             }
         }
 
+    // Finché true
     }while ( 1 ); 
 
+    // Copia l'alimento di nodo in nodo_toLink
     strcpy (nodo_toLink->info_merce.alimento, nodo.info_merce.alimento);
 
+    // 
     nodo_toLink->info_merce.colle = nodo.info_merce.colle;
 
     nodo_toLink->info_merce.peso = nodo.info_merce.peso;
