@@ -100,53 +100,79 @@ lista * preleva_dati_da_file( FILE * fp , bool scelta )
 }
 
 // LOAD USER
+// Accetta in ingresso: testa della lista utenti (che scorre tramite il passo ricorsivo) e un nodo utente
 void load_user (  lista * head , lista * utente )
 {
+    // Caso base
+    // Se la testa è NULL (siamo arrivati alla fine della lista)
     if ( !head )
     {
+        // Setta un carico negativo per il veicolo
         utente->info_user.carico_veivolo = -84;
-
-        return ;
+        // Ritorna
+        return;
     }
     
-
+    // Se targa e password del driver passato coincidono con quelli del nodo attuale (puntato da head)
     if( ! strcmp( head->info_user.targaID, utente->info_user.targaID ) && ! strcmp( head->info_user.password , utente->info_user.password ) )
     {
+        // Copia nome e cognome dell'utente del nodo attuale nel nodo dell'utente passato
         strcpy ( utente->info_user.name_user ,head->info_user.name_user );
-        strcpy ( utente->info_user.surname_user, head->info_user.surname_user);
+        strcpy ( utente->info_user.surname_user, head->info_user.surname_user );
 
+        // Assegna il peso del veicolo dell'utente attuale al peso del veicolo dell'utente passato
         utente->info_user.peso_veicolo = head->info_user.peso_veicolo;
+        // Annulla il carico del veicolo dell'utente passato
         utente->info_user.carico_veivolo = 0;
 
+        // Metti in pausa
         system("pause");
+        // Ritorna
         return;
     }
 
+    // Passo ricorsivo
+    // Passa al nodo successivo
     load_user ( head->next, utente );
 
 }
 
-
+// CHECK NODO ID
+// Controlla che il driver o il prodotto identificato da id_tofind
+// (la scelta tra i due è determinata dalla variabile bool) sia presente o meno.
+// Restituisce true se presente, false altrimenti.
 bool check_nodo_ID ( lista * head , const char * id_tofind , bool scelta )
 {
-    if( !head )         //caso base dove head e' NULL e ritorno false perche' non ho trovato nessuna corrispondenza
+    // Caso base
+    // Se la lista è finita i nodi da controllare sono terminati, quindi il driver/prodotto non è presente
+    if( !head )
     {
+        // Restituisci false
         return false;
     }
 
+    // Se scelta è false controlla il driver
     if( !scelta )
     {
-        if(!strcmp ( head->info_user.targaID, id_tofind  )) // ho trovato una corrispondenza ritorno true
-            return true;   
+        // Se c'è una corrispondenza
+        if(!strcmp ( head->info_user.targaID, id_tofind  ))
+        {
+            // Restituisci true
+            return true;
+        }
                 
     }
+    // Altrimenti controlla il prodotto
     else
     {
+        // Se il 
         if(!strcmp ( head->info_merce.alimento, id_tofind ) ) // ho trovato una corrispondenza ritorno true
             return true;          
     }
 
-    check_nodo_ID (head->next , id_tofind , scelta ); // caso ricorsivo dove scorro head
+    // Passo ricorsivo
+    // Passa al nodo successivo
+    check_nodo_ID (head->next , id_tofind , scelta );
 }
 
 
