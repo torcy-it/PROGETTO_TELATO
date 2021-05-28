@@ -307,43 +307,53 @@ lista * mod_nodo_add ( lista * head , lista* add, bool found )
     }
 
     // Passa al nodo successivo
-    head->next = mod_nodo_add ( head->next , add , found);
+    head->next = mod_nodo_add (head->next , add , found);
 
     // Restituisci la testa della lista
     return head;
 }
 
 // MOD NODO DEL
-lista *  mod_nodo_del (  lista * head , lista * del )
+// Modifica il contenuto della lista merce in stock a seconda della quantità indicata nel parametro del (che indica la rimozione di merce).
+lista *  mod_nodo_del ( lista * head , lista * del )
 {
-
+    
+    // Se la lista è finita
     if( !head )
     {
+        // Ritorna NULL
         return NULL;
     }
+    // Altrimenti
     else
     {
+        // Chiamata ricorsiva passando al nodo successivo
         head->next = mod_nodo_del (head->next , del ) ;
 
-
+        // Se i nomi degli alimenti indicati da head e del coincidono
         if( !strcmp ( head->info_merce.alimento, del->info_merce.alimento ) )
         {
-
+            
+            // Se la differenza tra i numeri dei colli dell'alimento di del e dell'alimento di head è 0
             if ( (del->info_merce.colle - head->info_merce.colle) == 0 )
             {
+                // Crea un nodo temporaneo
                 lista * tmp;
+                // Assegna al nodo temporaneo appena dichiarato l'indirizzo del nodo successivo a head
                 tmp = head->next;
 
-                // Cancello il nodo
+                // Rendi disponibile lo spazio di memoria occupato da head
                 free( head );
 
-                // Restituisco il puntatore a nodo temporaneo
+                // Restituisci il puntatore a nodo temporaneo
                 return tmp;
 
             }
-            else if( head->info_merce.colle < del->info_merce.colle)
+            
+            // Altrimenti se il numero dei colli dell'alimento indicato da head è minore del numero dei colli dell'alimento indicato da del
+            else if( head->info_merce.colle < del->info_merce.colle )
             {
-                if ( (   del->info_merce.colle - head->info_merce.colle) < 0 )
+                if ( ( del->info_merce.colle - head->info_merce.colle ) < 0 )
                 {
                     printf("\n\n\t\tNon e' possibile fare questa operazione perche ( head->info_merce.colle - del->info_merce.colle ) < 0\n\n");
                 }
