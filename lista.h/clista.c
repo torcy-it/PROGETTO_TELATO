@@ -394,12 +394,12 @@ lista *  mod_nodo_del ( lista * head , lista * del )
 }
 
 // CREA NODO MERCE
-// Crea un nodo da aggiungere alla lista della spesa
+// Crea un nodo da aggiungere alla lista della spesa (puntata da head)
 lista * crea_nodo_merce ( lista * head )
 {
     // Dichiara un nodo
     lista nodo;
-    // Alloca un nodo nodo_toLink
+    // Alloca un nodo nodo_toLink da aggiungere alla lista della spesa
     lista * nodo_toLink = (lista * )malloc ( sizeof ( lista ));
 
     // Esegui
@@ -426,7 +426,7 @@ lista * crea_nodo_merce ( lista * head )
         // Se il numero dei colli è positivo
         if( nodo.info_merce.colle > 0 )
         {
-            // Se la quantita' della merce
+            // Se la quantita' della merce è sufficiente
             if ( check_quantita_merce ( head, &nodo ) )
             {
                 // Esci dal ciclo
@@ -437,56 +437,93 @@ lista * crea_nodo_merce ( lista * head )
     // Finché true
     }while ( 1 ); 
 
-    // Copia l'alimento di nodo in nodo_toLink
+    // Copia il nome dell'alimento nodo nel nome dell'alimento nodo_toLink
     strcpy (nodo_toLink->info_merce.alimento, nodo.info_merce.alimento);
 
-    // 
+    // Assegna il numero di colli dell'alimento nodo al campo che indica il numero di colli dell'alimento nodo_toLink
     nodo_toLink->info_merce.colle = nodo.info_merce.colle;
 
+    // Assegna il peso dell'alimento nodo al campo peso dell'alimento nodo_toLink
     nodo_toLink->info_merce.peso = nodo.info_merce.peso;
-
+    
+    // Imposta a NULL il puntatore al nodo successivo a nodo_toLink
     nodo_toLink->next = NULL;
 
+    // Resituisci nodo_toLink
     return nodo_toLink;
     
 }
 
+// CHECK QUANTITA' MERCE
+// Accetta un puntatore head alla lista della merce in stock (che scorre la lista)
+// e un nodo che indica un alimento di cui controllare la quantità.
 bool check_quantita_merce ( lista * head, lista * nodo_to_check )
 {
-    if( !head )         //caso base dove head e' NULL e ritorno false perche' non ho trovato nessuna corrispondenza
+    // Caso base
+    // Se la lista è finita
+    if( !head )         
     {
+        // Restituisci false (non c'è corrispondenza con node_to_check)
         return false;
     }
    
-
+    // Se:
+    // il nome dell'alimento indicato da head e quello del nodo_to_check coincidono
+    // la quantità di alimenti node_to_check è positiva (ci sono ancora colli disponibili)
+    // la quantità di alimenti node_to_check è minore o uguale alla quantità dell'alimento indicato da head
+    // Allora:
+    // hai trovato una corrispondenza quindi restituisci true
     if(!strcmp ( head->info_merce.alimento, nodo_to_check->info_merce.alimento ) 
-                && nodo_to_check->info_merce.colle > 0 && nodo_to_check->info_merce.colle <= head->info_merce.colle ) // ho trovato una corrispondenza ritorno true
+                && nodo_to_check->info_merce.colle > 0 && nodo_to_check->info_merce.colle <= head->info_merce.colle )
     {
+        // Assegna il peso di head al peso di node_to_check 
         nodo_to_check->info_merce.peso = head->info_merce.peso;
+        // Restituisci true (corrispondenza trovata)
         return true;          
     }
 
-    check_quantita_merce (head->next , nodo_to_check); // caso ricorsivo dove scorro head
+    // Passo ricorsivo
+    // Controlla il nodo successivo
+    check_quantita_merce (head->next , nodo_to_check);
 }
 
+// DEALLOCATE LIST
+// Dealloca la lista passata come parametro.
+// Arriva prima in fondo alla lista, poi dealloca risalendo nodo per nodo
 void deallocate_list ( lista * head )
 {
+    // Caso base
+    // Se la lista è terminata
     if ( !head )
     {
+        // Ritorna
         return;
     }
         
+    // Passo ricorsivo
+    // Richiama la funzione sul nodo successivo
     deallocate_list(head->next); 
 
+    // Dealloca il nodo
     free(head);
 }
 
+// SOMMA ELEMENTI LISTA
+// Calcola il peso del carico
 int somma_elementi_lista ( lista * testa )
 {
 
+    // Se la lista non è terminata
     if ( testa != NULL )
+    {
+        // Restituisci la somma dei prodotti tra: pesi dei nodo della lista (passata come parametro) e la loro quantità
         return ((testa->info_merce.peso * testa->info_merce.colle ) + somma_elementi_lista(testa->next));
+    }
+    // Altrimenti
     else
+    {
+        // Restituisci 0
         return 0;
+    }
 
 }
