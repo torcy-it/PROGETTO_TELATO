@@ -141,20 +141,18 @@ void insert_int ( int * numero )
 int insert_int ( )
 {
     int ch;
-    int numero = 0;
+    unsigned int numero = 0;
+    int count = 0;
 
     do 
     {
         if ( ch < 48 || ch > 57) //controllo se il carattere e' contenuto nel range dell'asci 48 to 57
         {
-            if( ch == '\b' &&   numero %10 == 0 )
-            {
-                printf("\b%c\b",' ');
-            }
-            else if ( ch == '\b' &&   numero %10 != 0  ) //se non sono stati inseriti dei caratteri nell'array allora non cancellare 
+            
+            if ( ch == '\b' && count!= 0 ) //se non sono stati inseriti dei caratteri nell'array allora non cancellare 
             {                               
                 printf("\b%c\b",' ');
-
+                count--;
                 numero = numero /10;
             }
         }
@@ -162,10 +160,9 @@ int insert_int ( )
         {
             putchar ( ch );
             
-            if( numero %10 != 0 )
-                numero = numero * 10;
+            numero = numero * 10;
 
-            
+            count++;
             numero = numero + ( ch -'0' );
 
         }
