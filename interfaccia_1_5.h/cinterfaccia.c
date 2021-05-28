@@ -7,6 +7,21 @@
 #include "hgrafi.h"
 #define FIELD_SIZE 25
 #define INIT 4
+
+#include "hlista.h"
+#include "hour_function.h"
+#include "hgrafi.h"
+
+void interfaccia_percorso ( int  );
+
+lista * interfaccia_merce ( lista *, lista * merce);
+char * merce_scelte ( int  );
+
+void interfaccia_login ( );
+char * login_scelte ( int  );
+
+
+
 //Fabrizio se vuoi inserire la tua printf dell lista merci fallo 
 // perchè non sono riuscito ad emularla
 // per cambiare la printf vai su clista.c e cambi la funzione 
@@ -231,13 +246,18 @@ lista * interfaccia_merce ( lista * utente , lista * lista_merce)
                     printf("%d\n",peso_totale);
 
                     system("pause");
-                    deallocate_list ( lista_spesa ); // non funziona  una volta entrato in interfaccia percorso 
-                    //e aver concluso tale funzione ritornado qui la lista della spesa esiste ancora
 
+                    
                     system ("cls");
 
 
                     interfaccia_percorso ( peso_totale );
+
+
+                    deallocate_list ( lista_spesa ); // non funziona  una volta entrato in interfaccia percorso 
+                    //e aver concluso tale funzione ritornado qui la lista della spesa esiste ancora
+
+                    lista_spesa = NULL;
                 }
 
 
