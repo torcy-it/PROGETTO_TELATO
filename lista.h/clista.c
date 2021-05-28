@@ -353,25 +353,34 @@ lista *  mod_nodo_del ( lista * head , lista * del )
             // Altrimenti se il numero dei colli dell'alimento indicato da head è minore del numero dei colli dell'alimento indicato da del
             else if( head->info_merce.colle < del->info_merce.colle )
             {
+                // Se la differenza tra il numero dei colli dell'alimento di del e di head è negativa
                 if ( ( del->info_merce.colle - head->info_merce.colle ) < 0 )
                 {
-                    printf("\n\n\t\tNon e' possibile fare questa operazione perche ( head->info_merce.colle - del->info_merce.colle ) < 0\n\n");
+                    // Informa l'utente che non è possibile eseguire l'operazione
+                    printf("\n\n\t\tNon e' possibile fare questa operazione perche' ( head->info_merce.colle - del->info_merce.colle ) < 0\n\n");
                 }
+                // Altrimenti
                 else
                 {
+                    // Aggiorna il numero dei colli dell'alimento di head
                     head->info_merce.colle =  del->info_merce.colle - head->info_merce.colle;
         
                 }
                 
             }
+            // Altrimenti
             else
             {
+                // Se la differenza tra il numero dei colli dell'alimento head e quello di delè negativa
                 if ( (  head->info_merce.colle - del->info_merce.colle  ) < 0 )
                 {
+                    // Informa l'utente che non è possibile eseguire l'operazione
                     printf("\n\n\t\tNon e' possibile fare questa operazione perche ( del->info_merce.colle - head->info_merce.colle ) < 0\n\n");
                 }
+                // Altrimenti
                 else
                 {
+                    // Aggiorna il numero dei colli dell'alimento di head
                     head->info_merce.colle =  head->info_merce.colle - del->info_merce.colle;
                 }
                 
@@ -380,9 +389,11 @@ lista *  mod_nodo_del ( lista * head , lista * del )
         }
     }
     
+    // Restituisci un puntatore alla testa
     return head;
 }
 
+// CREA NODO MERCE
 lista * crea_nodo_merce ( lista * head )
 {
     lista nodo;
