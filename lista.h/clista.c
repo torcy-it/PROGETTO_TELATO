@@ -1,4 +1,3 @@
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -144,7 +143,7 @@ void load_user (  lista * head , lista * utente )
 bool check_nodo_ID ( lista * head , const char * id_tofind , bool scelta )
 {
     // Caso base
-    // Se la lista è finita i nodi da controllare sono terminati, quindi il driver/prodotto non è presente
+    // Se la lista è finita allora i nodi da controllare sono terminati, quindi il driver/prodotto non è presente
     if( !head )
     {
         // Restituisci false
@@ -165,9 +164,12 @@ bool check_nodo_ID ( lista * head , const char * id_tofind , bool scelta )
     // Altrimenti controlla il prodotto
     else
     {
-        // Se il 
-        if(!strcmp ( head->info_merce.alimento, id_tofind ) ) // ho trovato una corrispondenza ritorno true
-            return true;          
+        // Se c'è una corrispondenza
+        if(!strcmp ( head->info_merce.alimento, id_tofind ) )
+        {
+            // Restituisci true
+            return true;   
+        }
     }
 
     // Passo ricorsivo
@@ -175,16 +177,27 @@ bool check_nodo_ID ( lista * head , const char * id_tofind , bool scelta )
     check_nodo_ID (head->next , id_tofind , scelta );
 }
 
-
+// CHECK NODO KEY
+// Controlla le credenziali del driver
 bool check_nodo_KEY ( lista * head , const char * targaID, const char * password )
 {
-    if( !head )      //caso base dove head e' NULL e ritorno false perche' non ho trovato nessuna corrispondenza
+    // Caso base
+    // Se la lista è finita allora i nodi da controllare sono terminati, quindi le credenziali non hanno corrispondenza
+    if( !head )
+    {
+        // Restituisci false
         return false;
-    
-    if( !strcmp ( head->info_user.targaID, targaID ) && !strcmp ( head->info_user.password, password) ) // ho trovato una corrispondenza ritorno true
+    }
+    // Se le credenziali passate hanno corrispondenza
+    if( !strcmp ( head->info_user.targaID, targaID ) && !strcmp ( head->info_user.password, password) )
+    {
+        // Restituisci true
         return true; 
-
-    check_nodo_KEY (head->next , targaID, password); //caso ricorsivo dove scorro head
+    }
+    
+    // Passo ricorsivo
+    // Passa al nodo successivo
+    check_nodo_KEY (head->next , targaID, password);
 }
 
 
