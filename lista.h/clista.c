@@ -200,81 +200,120 @@ bool check_nodo_KEY ( lista * head , const char * targaID, const char * password
     check_nodo_KEY (head->next , targaID, password);
 }
 
-
+// ADD NODE
+// Accetta 2 parametri: un puntatore alla testa della lista a cui aggiungere il nodo
+// e il nodo da aggiungere chiamato info_new_user
 lista * add_node ( lista * head, lista * info_new_user )
 {
+    // Caso base
+    // Se la lista è terminata
     if( !head )
+    {
+        // Restituisci il nodo da aggiungere
         return info_new_user;
+    }
 
+    // Passo ricorsivo
+    // Passa al nodo successivo assegnando a next il risultato di add node con i nuovi parametri
     head->next = add_node ( head->next , info_new_user );
 
+    // Restituisci il puntatore alla testa della lista
     return head;
 }
 
-
+// AGGIORNA USER SU FILE
+// Stampa sul file driver_registrati.txt una nuova riga corrispondente a un nuovo driver che si è registrato.
 void aggiorna_user_su_file ( lista * head , FILE * fp )
 {
-
-    if(!fp) //eseguo un controllo per vedere se il file e' stato aperto correttamente
+    // Se il file non è stato aperto correttamente
+    if(!fp)
     {   
+        // Stampa un messaggio che informi l'utente
         printf("\nErrore scrittura ospite FILE appuntamenti\n"); 
-        return ;
+        // Ritorna
+        return;
     }
-
+    
+    // Caso base
+    // Se la lista è terminata
     if ( !head ) 
     {
+        // Chiudi il file
         fclose ( fp );
-        return; //checks if head is null 
+        // Ritorna
+        return;
     }
 
+    // Stampa il contenuto del nodo passato (il nuovo driver) su file
     fprintf(fp,"\n%s %s %s %s %d %d", head->info_user.targaID, head->info_user.password , head->info_user.name_user  , 
                                     head->info_user.surname_user, head->info_user.peso_veicolo, head->info_user.carico_veivolo);
 
-
-
+    // Passo ricorsivo
+    // Passa al nodo successivo
     aggiorna_user_su_file(head-> next , fp );   
 }
 
-
-
+// PRINT LISTA MERCE
+// Stampa il contenuto della lista contenente la merce in stock
 void print_lista_merce ( lista * head )
 {
 
-    if( !head ) return;
+    // Caso base
+    // Se la lista è terminata
+    if( !head )
+    {
+        // Ritorna
+        return;
+    }
 
+    // Stampa il contenuto di un nodo
     printf("\n|%32s| %d %d", head->info_merce.alimento, head->info_merce.colle, head->info_merce.peso);
 
+    // Passo ricorsico
+    // Passa al nodo successivo
     print_lista_merce ( head->next);
 }
 
-
+// MOD NODO ADD
+// Modifica il contenuto della lista merce in stock a seconda della quantità indicata nel parametro add (che indica l'aggiunta di merce).
+// found è il parametro che indica se un certo prodotto è presente o meno
 lista * mod_nodo_add ( lista * head , lista* add, bool found )
 {
+    // Se la lista non è finita e c'è corrispondenza con i nomi degli alimenti
     if(  head && !strcmp ( head->info_merce.alimento,add->info_merce.alimento ) && head )
     {
+        // Aggiorna le quantità
         head->info_merce.colle  += add->info_merce.colle;
+        // Imposta la variabile found a true per indicare che l'alimento è stato trovato
         found = true;
     }
     
+    // Se la lista è finita
     if( !head )
     {
+        // Se l'alimento è stato trovato
         if( found )
         {
+            // Restituisci NULL
             return NULL;    
         }
+        // Altrimenti
         else
         {
+            // Restituisci il parametro add passato in ingresso
             return add;
         }
         
     }
 
-
+    // Passa al nodo successivo
     head->next = mod_nodo_add ( head->next , add , found);
 
+    // Restituisci la testa della lista
     return head;
 }
 
+// MOD NODO DEL
 lista *  mod_nodo_del (  lista * head , lista * del )
 {
 
