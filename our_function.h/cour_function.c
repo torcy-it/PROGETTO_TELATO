@@ -9,6 +9,8 @@
 
 #define FIELD_SIZE 25
 
+
+// GET PASSWORD
 void get_password( char *password, int inizio )
 {
     int ch = 84; //variabile intera per prendere da input della tastiera
@@ -43,10 +45,7 @@ void get_password( char *password, int inizio )
     get_password ( password , inizio );
 }
 
-
-//---------------------------------------------
-
-
+// TO UPPER
 void to_upper(char *stringa) 
 {
     if (*stringa == '\0') //fine stringa
@@ -60,7 +59,7 @@ void to_upper(char *stringa)
     to_upper(stringa + 1);// aumento pos indirizzo puntatore
 }
 
-
+// DOUBLE PASSWORD
 void double_password(char *password)
 {
     char tmp_password[FIELD_SIZE];
@@ -138,6 +137,7 @@ void insert_int ( int * numero )
 }
 */
 
+// INSERT INT
 int insert_int ( )
 {
     int ch;
@@ -253,7 +253,7 @@ lista * login ( lista * head )
     utente->next = NULL;
 }
 
-
+// STAMPA GRAPHIC GRAFO
 void stampa_graphic_grafo( void )
 {
     printf("\n\n");
