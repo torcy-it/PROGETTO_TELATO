@@ -6,70 +6,100 @@
 #include "hlista.h"
 #include "hour_function.h"
 
+// PRELEVA MERCE
+// Accetta in ingresso un puntatore aperto sul file stock_merce.txt in modalità "r"
+// che usa per leggere le righe del file. Ogni riga comprende 3 stringhe e corrisponde a un prodotto.
 lista * preleva_merce ( FILE * fp )
 {
-    lista * nodo_t = (lista *) malloc(sizeof(lista)); //alloco memoria per il nodo
+    // Alloca memoria per il nodo
+    lista * nodo_t = (lista *) malloc(sizeof(lista));o
 
+    // Se non legge 3 stringhe (è arrivato alla fine del file)
     if ( fscanf(fp,"%s %d %d",nodo_t->info_merce.alimento, &nodo_t->info_merce.colle, &nodo_t->info_merce.peso ) != 3 ) 
     {
+        // Restituisci NULL
         return NULL;
     }
-
+    
+    // Restituisci il nodo 
     return nodo_t;    
 }
 
+// PRELEVA USER
+// Accetta in ingresso un puntatore aperto sul file driver_registrati.txt in modalità "r"
+// che usa per leggere le righe del file. Ogni riga comprende 4 stringhe e 2 interi e corrisponde a un driver registrato
 lista * preleva_user ( FILE * fp )
 {
+    // Alloca memoria per il nodo
     lista * nodo_t = (lista *) malloc(sizeof(lista)); //alloco memoria per il nodo
 
+    // Se non legge 4 stringhe e 2 interi (è arrivato alla fine del file)
     if ( fscanf(fp,"%s %s %s %s %d %d", nodo_t->info_user.targaID , nodo_t->info_user.password , nodo_t->info_user.name_user  , nodo_t->info_user.surname_user,
                  &nodo_t->info_user.peso_veicolo, &nodo_t->info_user.carico_veivolo) != 6 )
     {
+        // Restituisci NULL
         return NULL;
     }
 
+    // Restituisci il nodo
     return nodo_t;
 }
 
+// PRELEVA DATI DA FILE
+// Accetta in ingresso un puntatore aperto su un file, che può essere o driver_registrati.txt
+// o stock_merce.txt. Da quale dei due file prelevare i dati è determinato dal 2° parametro: scelta.
+// Se scelta è false preleva un utente da driver_registrati.txt, mentre se è true preleva un prodotto da stock_merce.txt
 lista * preleva_dati_da_file( FILE * fp , bool scelta )
 {
 
-    if(!fp) //eseguo un controllo per vedere se il file e' stato aperto correttamente
+    // Se il file non è stato aperto correttamente (controllo errore)
+    if(!fp)
     {   
+        // Stampa un messaggio che informi l'utente
         printf("\nErrore scrittura ospite FILE appuntamenti\n"); 
+        // Restituisci NULL
         return NULL;
     }
 
+    // Dichiara un nodo
     lista * nodo_t;
 
-
+    // Se scelta è false
     if( !scelta )
     {
+        // Preleva un driver
         nodo_t = preleva_user ( fp );
     }
+    // Altrimenti
     else 
     {
+        // Preleva un prodotto
         nodo_t = preleva_merce ( fp );
     }
 
 
-    //caso base 
+    // Caso base 
     if( !nodo_t ) 
     {
-        fclose( fp ); // chiudo il file
+        // Chiudi il file
+        fclose( fp );
         
-        free ( nodo_t ); //libero il nodo allocato in precendenza 
+        // Libera il nodo allocato in precedenza
+        free ( nodo_t ); 
 
-        return NULL; // e ritorno null quindi lo stack si chiudera' dando come ultimo elemento un nodo a NULL
+        // Restituisci NULL in modo che lo stack si chiuda dando come ultimo elemento un nodo a NULL
+        return NULL;
     }
     
-    // caso ricorsivo
+    // Passo ricorsivo
     nodo_t->next = preleva_dati_da_file(fp, scelta);
 
+    // Restituisci il nodo
     return nodo_t;
 
 }
 
+// LOAD USER
 void load_user (  lista * head , lista * utente )
 {
     if ( !head )
