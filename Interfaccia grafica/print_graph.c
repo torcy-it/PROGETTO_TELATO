@@ -1,3 +1,5 @@
+// STAMPA GRAFO
+// Funzione che stampa a video la mappa di ISLAND
 void stampa_grafo()
 {
     printf("\n\n");
