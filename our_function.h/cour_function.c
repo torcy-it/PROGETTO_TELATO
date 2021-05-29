@@ -86,36 +86,59 @@ void to_upper(char *stringa)
 // DOUBLE PASSWORD
 void double_password(char *password)
 {
+    // Dichiara una variabile password temporanea dove verrà salvata la password temporanea
     char tmp_password[FIELD_SIZE];
 
+    // Stampa a video la parola "Password"
     printf("\n\n\t\t\tPassword: ");
+    // Pulisci buffer
     fflush( stdout );
 
+    // Richiedi password all'utente
     get_password( tmp_password , 0);
 
+    // Se la password digitata è "back"
     if (!strcmp(tmp_password, "back"))
     {
+        // Copia "back" nel parametro passato in input
         strcpy(password, "back");
+        // Ritorna
         return;
     }
 
+    // Stampa a video la parola "Password"
     printf("\n\n\t\t\tPassword: ");
+    // Pulisci buffer
     fflush( stdout );
 
+    // Richiedi password all'utente
     get_password( password , 0 );
 
+    // Se la password digitata è "back"
     if (!strcmp(password, "back"))
+    {
+        // Ritorna
         return;
+    }
     
-
+    // Se le password coincidono
     if (!strcmp(tmp_password, password))
+    {
+        // Ritorna
         return;
+    }
 
+    // Altrimenti le password non coincidono, quindi:
+    
+    // Pulisci schermo
     system("cls");
 
+    // Informa l'utente che non c'è corrispondenza tra le 2 password
     printf("\n\t\t\tLe password !%s! !%s! non combaciano riprova\n", tmp_password, password);
+    // Pulisci buffer
     fflush(stdout);
     
+    // Chiamata ricorsiva per chiedere nuovamente la password
     double_password(password);
     
 
