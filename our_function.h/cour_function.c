@@ -84,6 +84,7 @@ void to_upper(char *stringa)
 }
 
 // DOUBLE PASSWORD
+// Controllo password
 void double_password(char *password)
 {
     // Dichiara una variabile password temporanea dove verrà salvata la password temporanea
@@ -200,7 +201,7 @@ int insert_int ( )
     // Esegui
     do 
     {
-        // Se il carattere non è contenuto nel range ASCII da 48 a 57
+        // Se il carattere non è contenuto nel range ASCII da 48 a 57 (se non è un intero)
         if ( ch < 48 || ch > 57)
         {
             // Cancella il carattere
@@ -240,83 +241,123 @@ int insert_int ( )
 }
 
 // SIGN IN
+// Registrazione del driver al sistema
 lista * signin ( lista * head )
 {
-
+    // Alloca nodo data_user
     lista * data_user = ( lista * ) malloc ( sizeof (lista ));
 
+    // Esegui
     do
     {
+        // Stampa a video "User ID" (da sostituire con Digitare targa)
         printf("\n\n\t\t\tUser ID: ");
+        // Pulisci buffer
         fflush( stdout );
 
+        // Richiedi targa driver all'utente
         scanf("%s", data_user->info_user.targaID);
 
+        // Converti la targa digitata in maiuscolo
         to_upper(data_user->info_user.targaID);
 
+        // Pulisci schermo
         system("cls");
 
+    // Finché la targa digitata non ha corrispondenza
     }while( check_nodo_ID ( head , data_user->info_user.targaID , false));
 
-
+    // Stampa a video "Nome" (da sostituire con Digitare nome)
     printf("\n\n\t\t\tName: ");
+    
+    // Richiedi nome driver da tastiera
     scanf("%s",data_user->info_user.name_user);
-
+    
+    // Pulisci schermo
     system("cls");
     
+    // Stampa a video "Surname" (da sostituire con Cognome)
     printf("\n\n\t\t\tSurname : ");
+    
+    // Richiedi cognome driver da tastiera
     scanf("%s",data_user->info_user.surname_user);
 
+    // Pulisci schermo
     system("cls");
 
+    // Richiedi password
     double_password( data_user->info_user.password );
 
+    // Pulisci schermo
     system("cls");
 
+    // Stampa a video "Peso camion" (da sostituire con Digitare Peso camion)
     printf("\n\n\t\t\tPeso camion: ");
+    // Pulisci buffer
     fflush( stdout );
 
+    // Richiedi il peso del veicolo
     do 
     {
+        // Accettando solo valori interi
         data_user->info_user.peso_veicolo = insert_int ( );     
 
     }while ( data_user->info_user.peso_veicolo > 0 );
     
-    
+    // Imposta il peso del carico a 0
     data_user->info_user.carico_veivolo = 0;
 
+    // Imposta a NULL il puntatore a next
     data_user->next = NULL;
 
+    // Pulisci schermo
     system("cls");
 
+    // Restituisci utente creato
     return add_node( head , data_user );
 
 }
 
+// LOGIN
+// Accesso del driver accreditato
 lista * login ( lista * head )
 {
+    // Alloca un nodo utente
     lista * utente = ( lista *)malloc ( sizeof ( lista ));
 
+    // Stampa a video USER ID (come sopra) 
     printf("\n\n\t\t\tUser ID: ");
+    
+    // Pulisci buffer
     fflush(stdout);
 
+    // Leggi targa da tastiera
     scanf("%s", utente->info_user.targaID);
 
+    // Converti stringa/targa digitata in maiuscolo
     to_upper(utente->info_user.targaID);  
 
+    // Stampa a video "Password"
     printf("\n\n\t\t\tPassword: ");
+    
+    // Pulisci buffer
     fflush(stdout);
 
+    // Leggi password mascherando le lettere digitate con '*'
     get_password( utente->info_user.password , 0);
 
+    // Pulisci schermo
     system("cls");
 
+    // Accedi con le credenziali digitate
     load_user ( head , utente ); 
 
+    // Imposta a NULL il puntatore a next del nodo Utente
     utente->next = NULL;
 }
 
 // STAMPA GRAPHIC GRAFO
+// Stampa a video la mappa di Island
 void stampa_graphic_grafo( void )
 {
     printf("\n\n");
