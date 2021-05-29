@@ -192,17 +192,18 @@ int insert_int ( )
 {
     // Carattere digitato da tastiera
     int ch;
-    // 
+    // Numero restituito alla fine della funzione
     unsigned int numero = 0;
+    // Variabile di conteggio
     int count = 0;
     
     // Esegui
     do 
     {
-        // Se il carattere è contenuto nel range ASCII da 48 a 57
+        // Se il carattere non è contenuto nel range ASCII da 48 a 57
         if ( ch < 48 || ch > 57)
         {
-            // Se non sono stati inseriti dei caratteri nell'array allora non cancellare
+            // Cancella il carattere
             if ( ch == '\b' && count!= 0 )
             {                               
                 printf("\b%c\b",' ');
@@ -210,8 +211,10 @@ int insert_int ( )
                 numero = numero /10;
             }
         }
-        else //in questo campo do come outputa video '*' e inserisco in password il carattere ch 
+        // Altrimenti
+        else
         {
+            // Visualizza carattere
             putchar ( ch );
             
             numero = numero * 10;
@@ -221,11 +224,17 @@ int insert_int ( )
 
         }
 
-        if ( (ch = getch()) == '\r' ) 
+        // Se viene digitato un carattere di escape
+        if ( (ch = getch()) == '\r' )
+        {
+            // Esci dal ciclo
             break;
+        }
 
+    // Finché true
     }while( 1 );
 
+    // Ritorna numero
     return numero;
     
 }
