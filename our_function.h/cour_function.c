@@ -1,4 +1,3 @@
-
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
@@ -11,52 +10,77 @@
 
 
 // GET PASSWORD
+// Funzione che maschera la password inserita con '*'
+// in modo da nasconderla a video
 void get_password( char *password, int inizio )
 {
-    int ch = 84; //variabile intera per prendere da input della tastiera
+    // Variabile intera per prendere input da tastiera
+    int ch = 84;
 
-    if( inizio == FIELD_SIZE-1 || ( (ch = getch()) == '\r'  && inizio != 0) ) //controllo se ci troviamo in una pos maggiore della dim dell'array
-    {                                                                         //GETCH prende i dati da input e ne blocca il buffer per l'output
-        *password = '\0';                                                       // inizio != 0 perche' l'utente deve inserire per forza una password
-        return;                                                                 //controllo se il carattere inserito è uguale a '\r' cioe'0 a return 
+    // Caso base.
+    // Controlla se ci troviamo in una posizione maggiore della dimensione dell'array.
+    // getch prende i dati da input e ne blocca il buffer per l'output.
+    // inizio!=0 perché l'utente deve inserire per forza una password.
+    // Controlla se il carattere inserito è uguale a '\r' cioé 0 a return
+    if( inizio == FIELD_SIZE-1 || ( (ch = getch()) == '\r'  && inizio != 0) )
+    {  
+        *password = '\0';                                                  
+        return;                                                                 
     }
     
-    if ( ch < 48 || ch > 122) //controllo se il carattere e' contenuto nel range dell'asci 48 to 122
+    // Se il carattere è contenuto nel range ASCII da 48 a 122
+    if ( ch < 48 || ch > 122)
     {
-
-        if (inizio != 0 && ch == '\b' ) //se non sono stati inseriti dei caratteri nell'array allora non cancellare 
+        // Se non sono stati inseriti dei caratteri nell'array allora non cancellare
+        if (inizio != 0 && ch == '\b' )
         {                               
             printf("\b%c\b", ' ');
             inizio--;
             password--;
         }
     }
-    else //in questo campo do come outputa video '*' e inserisco in password il carattere ch 
+    // Altrimenti
+    else
     {
+        // Stampa a video *
         putchar('*');
 
+        // Inserisci in password il carattere ch
         *password = (char)ch;
 
-        password++; // incremento il puntatore
+        // Incrementa il puntatore
+        password++;
 
-        inizio++; //incremento inizio per il controllo del backspace
+        // Incrementa inizio per il controllo del backspace
+        inizio++;
     }
 
+    // Passo ricorsivo
     get_password ( password , inizio );
 }
 
 // TO UPPER
+// Funzione che rende maiuscola la stringa passata
 void to_upper(char *stringa) 
 {
-    if (*stringa == '\0') //fine stringa
-        return;
-
-    else if (*stringa >= 'a' && *stringa <= 'z') //controllo carattere minuscolo
+    // Caso base.
+    // Se la stringa è terminata
+    if (*stringa == '\0')
     {
-        *stringa = *stringa - 'a' + 'A';//cambio in maiuscolo
+        // Ritorna
+        return;
     }
 
-    to_upper(stringa + 1);// aumento pos indirizzo puntatore
+    // Altrimenti se il carattere è minuscolo
+    else if (*stringa >= 'a' && *stringa <= 'z')
+    {
+        // Cambialo in minuscolo
+        *stringa = *stringa - 'a' + 'A';
+    }
+
+    // Passo ricorsivo.
+    // Passa al carattere successivo
+    to_upper(stringa + 1);
 }
 
 // DOUBLE PASSWORD
