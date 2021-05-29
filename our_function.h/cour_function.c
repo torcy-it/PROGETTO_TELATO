@@ -135,6 +135,7 @@ void double_password(char *password)
 
     // Informa l'utente che non c'è corrispondenza tra le 2 password
     printf("\n\t\t\tLe password !%s! !%s! non combaciano riprova\n", tmp_password, password);
+    
     // Pulisci buffer
     fflush(stdout);
     
@@ -185,18 +186,24 @@ void insert_int ( int * numero )
 */
 
 // INSERT INT
+// Funzione per permettere l'inserimento da tastiera dei soli numeri interi.
+// Usata, ad esempio, quando viene richiesto all'utente di digitare il peso del veicolo o la quantità di merce.
 int insert_int ( )
 {
+    // Carattere digitato da tastiera
     int ch;
+    // 
     unsigned int numero = 0;
     int count = 0;
-
+    
+    // Esegui
     do 
     {
-        if ( ch < 48 || ch > 57) //controllo se il carattere e' contenuto nel range dell'asci 48 to 57
+        // Se il carattere è contenuto nel range ASCII da 48 a 57
+        if ( ch < 48 || ch > 57)
         {
-            
-            if ( ch == '\b' && count!= 0 ) //se non sono stati inseriti dei caratteri nell'array allora non cancellare 
+            // Se non sono stati inseriti dei caratteri nell'array allora non cancellare
+            if ( ch == '\b' && count!= 0 )
             {                               
                 printf("\b%c\b",' ');
                 count--;
@@ -223,7 +230,7 @@ int insert_int ( )
     
 }
 
-
+// SIGN IN
 lista * signin ( lista * head )
 {
 
