@@ -9,7 +9,7 @@
 int main ()
 {
 
-    schermata_avvio ( );
+    schermata_percorso ( 70 );
 
     return 0;
 }

@@ -182,7 +182,7 @@ void insert_int ( int * numero )
 int insert_int ( )
 {
     // Carattere digitato da tastiera
-    int ch;
+    int ch = 't';
     // Numero restituito alla fine della funzione
     unsigned int numero = 0;
     // Variabile di conteggio
@@ -193,7 +193,7 @@ int insert_int ( )
     {
 
         // Se viene digitato un carattere di escape
-        if ( (ch = getch()) == '\r' )
+        if ( (ch = getch()) == '\r' && count != 0 )
         {
             // Esci dal ciclo
             return numero;
@@ -300,13 +300,9 @@ lista * signin ( lista * head )
     fflush( stdout );
 
     // Richiedi il peso del veicolo
-    do 
-    {
-        
-        data_user->info_user.peso_veicolo = insert_int ( );  
 
-        // Accettando solo valori interi
-    }while ( data_user->info_user.peso_veicolo > 0 );
+    data_user->info_user.peso_veicolo = insert_int ( );  
+
     
     // Imposta il peso del carico a 0
     data_user->info_user.carico_veivolo = 0;
@@ -493,4 +489,67 @@ void stampa_schermata_ordini ( int schermata, lista * lista_merce , lista * list
     lista_spesa ? print_lista_merce ( lista_spesa ) : printf("\n\tLista della spesa vuota\n")  ; 
 
     printf("\n\n");
+}
+
+int get_char ( int dimensione_da_non_sforare )
+{
+    int ch;
+    int numero = -1;
+
+    //numero >= dimensione_da_non_sforare && numero < 0
+
+    while ( numero >= dimensione_da_non_sforare || numero < 0 )
+    {
+        ch = getch ( );
+
+        numero = ch - 97;
+
+        if( numero >= 0 && numero < dimensione_da_non_sforare ) 
+            printf("%c",ch);
+    }
+    
+    
+}
+
+int operazione_nodo_merce ( lista * nodo_merce , lista * del)
+{
+
+    int risultato = 0;
+
+    if( (nodo_merce->info_merce.colle * nodo_merce->info_merce.peso) < del->info_user.carico_veivolo )
+    {
+        // Se la differenza tra il numero dei colli dell'alimento di del e di head è negativa
+        if ( ( del->info_merce.colle - nodo_merce->info_merce.colle ) < 0 )
+        {
+            // Informa l'utente che non è possibile eseguire l'operazione
+            printf("\n\n\t\tNon e' possibile fare questa operazione perche' ( head->info_merce.colle - del->info_merce.colle ) < 0\n\n");
+        }
+        // Altrimenti
+        else
+        {
+            // Aggiorna il numero dei colli dell'alimento di head
+            risultato =  del->info_user.carico_veivolo - (nodo_merce->info_merce.colle * nodo_merce->info_merce.peso);
+
+        }
+        
+    }
+    // Altrimenti
+    else
+    {
+        // Se la differenza tra il numero dei colli dell'alimento head e quello di delè negativa
+        if ( (  nodo_merce->info_merce.colle  - del->info_merce.colle  ) < 0 )
+        {
+            // Informa l'utente che non è possibile eseguire l'operazione
+            printf("\n\n\t\tNon e' possibile fare questa operazione perche ( del->info_merce.colle - head->info_merce.colle ) < 0\n\n");
+        }
+        // Altrimenti
+        else
+        {
+            // Aggiorna il numero dei colli dell'alimento di head
+            risultato =  (nodo_merce->info_merce.colle * nodo_merce->info_merce.peso) - del->info_user.carico_veivolo;
+        }
+        
+    }
+
+    return risultato;
 }

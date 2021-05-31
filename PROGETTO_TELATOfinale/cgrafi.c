@@ -51,7 +51,6 @@ void create_graph( grafo gr, FILE * fp , int *vertici , bool errore )
     // aggiungo un arco tra il vertice del grafo "*vertici" e il nodo appena creato "file_data"
     gr->adj [ *vertici ] = add_archi( file_data, fp, &errore) ;
 
-    //////////////////////////////////////////////////////////////////////////////////////////////////////// TERA non capisce perche liberare la memoria
     // libero la variabile per il prossimo utilizzo 
     free( file_data );
     
@@ -100,9 +99,9 @@ arco add_archi( arco file_data , FILE * fp , bool * errore )
         return NULL;
     }
 
-    
     // assegnazioni su nodo_t dopo tutti i controlli
     nodo_t->key = file_data->key;
+    
     nodo_t->peso = file_data->peso;
     nodo_t->lunghezza = file_data->lunghezza;
 
@@ -170,7 +169,9 @@ void print_archi ( arco head )
 void dijkstra(grafo gr,int source,int target , int peso_veicolo)
 {
     printf("\n");
-    int total_vertici = gr->numero_vertici;
+    int total_vertici = gr->numero_vertici ;
+
+    //printf("\n%d\n",total_vertici);
 
     int dist[total_vertici];
 
@@ -181,7 +182,7 @@ void dijkstra(grafo gr,int source,int target , int peso_veicolo)
     
     int selected [total_vertici];
 
-    int m,min,start,d;
+    int min, start, distance;
 
     char path[total_vertici];
     //-------------
@@ -198,51 +199,71 @@ void dijkstra(grafo gr,int source,int target , int peso_veicolo)
     selected[start] = 1;
 
     dist[start] = 0;
-
-    int count = 0;
+    
     int loop = 0;
 
-    // source [0,1] to all target work
+    int key_small_island = 0;
+
 
     while( selected[target] == 0)
     {
         min = INT_MAX;
-        m = 0;
-        if ( loop > gr->numero_vertici * gr->numero_vertici ) break;
+
+        if ( loop > total_vertici + 2 ) 
+        {
+            for( int i = 0; i < total_vertici; i++)
+            {
+                if( selected[i] != 1 )
+                {
+                    start = i;
+                    loop = 0;
+                }
+                    
+
+            }
+        }
 
         arco pCrawl = gr->adj[start];
-
 
         while (pCrawl)
         {
             //printf("%d",pCrawl->key);
 
-            d = dist[start] + pCrawl->lunghezza;
+            distance = dist[start] + pCrawl->lunghezza;
 
-
+            //printf(" ++%d_%d_%d++ ", distance, start,pCrawl->key);
             //printf( " %d ", dist[i]);
 
-            if( peso_veicolo <= pCrawl->peso && d < dist[pCrawl->key] && selected[pCrawl->key] == 0)
+            if( peso_veicolo <= pCrawl->peso && distance < dist[pCrawl->key] && selected[pCrawl->key] == 0)
             {
-                dist[pCrawl->key] = d;
+                dist[pCrawl->key] = distance;
                 prev[pCrawl->key] = start;
+                //printf(" ? ");
             }
+
             if( min > dist[pCrawl->key] && selected[pCrawl->key] == 0)
             {
                 min = dist[pCrawl->key];
-                m = pCrawl->key;
+                key_small_island = pCrawl->key;
+                //printf(" ! ");
             }
 
+            //printf(" %d_%d_%d --> ", distance, start,pCrawl->key);
             pCrawl = pCrawl->next; 
             
+            /*
+                for( i= 0 ; i< total_vertici ; i++ )
+                {
+                    printf("%d",selected[i]);
+                }
+            */
             
-            //printf(" %d_%d_%d ", d, i, start);
             
         }
 
-        //printf("\n%d\n",m);
-        count++;
-        start = m;
+        //printf("\n%d\n",key_small_island);
+
+        start = key_small_island;
         selected[start] = 1;
 
         loop++;
@@ -261,6 +282,24 @@ void dijkstra(grafo gr,int source,int target , int peso_veicolo)
     path[j]='\0';
 
     strrev(path);
+
+    printf("\n\t");
+    printf(" %c ",path[0]);
+
+    for( j = 1, i = 0; path[j] != 0 ; i++ )
+    {
+    
+        sleep( 1 );
+
+        printf( " - " );
+
+        if( i%3 == 0 )
+        {
+            printf(" %c ",path[j]);
+
+            j++;
+        }
+    }
 
     printf("\n\tIl percorso piu' breve e' %s con %d ponti attraversati.\n\t", path,dist[target]);
 

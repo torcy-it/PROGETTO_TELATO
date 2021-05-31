@@ -6,6 +6,7 @@
     {
         int lunghezza;
         int key;
+        char char_key;
         int peso; // settare ad 1
         
         struct archi *next;
@@ -34,6 +35,5 @@
     arco add_archi( arco , FILE * , bool * );
 
     int numero_vertici( grafo  );
-
 
 #endif

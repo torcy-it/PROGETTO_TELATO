@@ -273,7 +273,7 @@ void print_lista_merce ( lista * head )
 
 // MOD NODO ADD
 // Modifica il contenuto della lista merce in stock a seconda della quantità indicata nel parametro add (che indica l'aggiunta di merce).
-// found è il parametro che indica se un certo prodotto è presente o meno
+// found è il parametro che indica se un certo prodotto è presente o meno cosi che arrivato a null so se ho gia modificato la lista else lo aggiungo alla fine
 lista * mod_nodo_add ( lista * head , lista* add, bool found )
 {
     // Se la lista non è finita e c'è corrispondenza con i nomi degli alimenti
@@ -513,63 +513,16 @@ void deallocate_list ( lista * head )
 
 // SOMMA ELEMENTI LISTA
 // Calcola il peso del carico
-int somma_elementi_lista ( lista * testa )
+lista * elimina_lista_spesa ( lista * merce, lista * spesa )
 {
+    
+    if( !spesa )
+    {
 
-    // Se la lista non è terminata
-    if ( testa != NULL )
-    {
-        // Restituisci la somma dei prodotti tra: pesi dei nodo della lista (passata come parametro) e la loro quantità
-        return ((testa->info_merce.peso * testa->info_merce.colle ) + somma_elementi_lista(testa->next));
-    }
-    // Altrimenti
-    else
-    {
-        // Restituisci 0
-        return 0;
+        return merce ;
     }
 
-}
-
-int operazione_nodo_merce ( lista * nodo_merce , lista * del)
-{
-
-    int risultato = 0;
-
-    if( (nodo_merce->info_merce.colle * nodo_merce->info_merce.peso) < del->info_merce.colle )
-    {
-        // Se la differenza tra il numero dei colli dell'alimento di del e di head è negativa
-        if ( ( del->info_merce.colle - nodo_merce->info_merce.colle ) < 0 )
-        {
-            // Informa l'utente che non è possibile eseguire l'operazione
-            printf("\n\n\t\tNon e' possibile fare questa operazione perche' ( head->info_merce.colle - del->info_merce.colle ) < 0\n\n");
-        }
-        // Altrimenti
-        else
-        {
-            // Aggiorna il numero dei colli dell'alimento di head
-            risultato =  del->info_user.carico_veivolo - (nodo_merce->info_merce.colle * nodo_merce->info_merce.peso);
-
-        }
-        
-    }
-    // Altrimenti
-    else
-    {
-        // Se la differenza tra il numero dei colli dell'alimento head e quello di delè negativa
-        if ( (  nodo_merce->info_merce.colle  - del->info_merce.colle  ) < 0 )
-        {
-            // Informa l'utente che non è possibile eseguire l'operazione
-            printf("\n\n\t\tNon e' possibile fare questa operazione perche ( del->info_merce.colle - head->info_merce.colle ) < 0\n\n");
-        }
-        // Altrimenti
-        else
-        {
-            // Aggiorna il numero dei colli dell'alimento di head
-            risultato =  (nodo_merce->info_merce.colle * nodo_merce->info_merce.peso) - del->info_user.carico_veivolo;;
-        }
-        
-    }
-
-    return risultato;
+    merce = mod_nodo_add  ( merce , spesa , false);
+    
+    elimina_lista_spesa ( merce , spesa->next );
 }

@@ -75,6 +75,6 @@ lista * mod_nodo_add ( lista *  , lista* , bool  );
 
 void deallocate_list ( lista *);
 
-int somma_elementi_lista ( lista * );
+lista * elimina_lista_spesa ( lista * , lista *  );
 
 #endif

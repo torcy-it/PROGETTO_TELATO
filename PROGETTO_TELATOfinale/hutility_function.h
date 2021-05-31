@@ -18,6 +18,8 @@ void to_upper( char *);
 
 void get_password( char * , int);
 
+int get_char ( int  );
+
 int insert_int ( void ) ;
 
 lista * login ( lista *   );

@@ -246,9 +246,24 @@ lista * schermata_ordini ( lista * utente , lista * lista_merce)
 
                     system("cls");
 
-                    printf("\n\tPeso totale : %d\n\tConfermi ordine? y/n\n\t>",utente->info_user.carico_veivolo);
+                    printf("\n\n");
 
-                    choice = getch (); 
+                    if( utente->info_user.carico_veivolo > 100)
+                    {
+                        printf("\n\tPeso totale : %d\n\tPeso troppo elevato, non puoi raggiungere nessun isola\n\n\n\t",utente->info_user.carico_veivolo);
+
+                        choice = 't';
+
+                        system("pause");
+
+                    }
+                    else
+                    {
+                        printf("\n\tPeso totale : %d\n\tConfermi ordine? y/n\n\t>",utente->info_user.carico_veivolo);
+                        
+                        choice = getch ( ); 
+                    }
+                    
 
                     if ( choice == 'y') 
                     {
@@ -263,8 +278,7 @@ lista * schermata_ordini ( lista * utente , lista * lista_merce)
 
                         schermata_percorso ( utente->info_user.carico_veivolo );
 
-                        deallocate_list ( lista_spesa ); // non funziona  una volta entrato in interfaccia percorso 
-                        //e aver concluso tale funzione ritornado qui la lista della spesa esiste ancora
+                        deallocate_list ( lista_spesa ); 
 
                         lista_spesa = NULL;
 
@@ -294,6 +308,12 @@ lista * schermata_ordini ( lista * utente , lista * lista_merce)
 
     }while ( !exit );  
 
+
+    if( lista_spesa ) 
+    {
+        lista_merce = elimina_lista_spesa ( lista_merce, lista_spesa );
+        deallocate_list ( lista_spesa );
+    }
     return lista_merce;
 
 }
@@ -313,7 +333,7 @@ void schermata_percorso ( int peso_totale )
     if(gr == NULL) 
     {
         printf("ERRORE: imp. allocare mem. del grafo\n");
-        exit(1);
+        return;
     }
 
     
@@ -324,7 +344,7 @@ void schermata_percorso ( int peso_totale )
     if(gr->adj == NULL)  
     {
         printf("ERRORE: imp. allocare mem. per la lista del grafo\n");
-        exit (1);
+        return;
     } 
     
     
@@ -338,20 +358,15 @@ void schermata_percorso ( int peso_totale )
 
     //gr != NULL ? stampa_grafo ( gr, 0 ) : printf("\n\n\tGrafo Vuoto\n")  ;  
 
+    printf("\n\n\tInserisci la partenza\n\t>");
 
-    do
-    {
-        printf("\n\n\tInserisci la partenza\n\t>");
-        source = insert_int ( );
+    source = get_char ( gr->numero_vertici );
 
-    }while ( source < 0 && source > gr->numero_vertici );
 
-    do
-    {
-        printf("\n\n\tInserisci la destinazione\n\t>");
-        target = insert_int ( );
+    printf("\n\n\tInserisci la destinazione\n\t>");
 
-    } while ( target < 0 && target > gr->numero_vertici );
+    target = get_char ( gr->numero_vertici );
+
     
     dijkstra( gr, source, target, peso_totale );
 
