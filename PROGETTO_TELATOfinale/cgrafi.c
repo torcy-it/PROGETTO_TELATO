@@ -24,13 +24,9 @@ void create_graph( grafo gr, FILE * fp , int *vertici , bool errore )
     
     // prendo il primo valore dal file
     fscanf ( fp, "%d" , &file_data->key );
-
-    
-    // devo aggiungere un vertice e poi successivamente arco
-
     
     // se siamo alla fine del file o c'è un errore
-    // chiudi il file e librea lultimo nodo ( appena ) allocato
+    // chiudi il file e libera lultimo nodo ( appena ) allocato
     if( feof(fp) || errore )
     {
         free( file_data );
@@ -48,14 +44,15 @@ void create_graph( grafo gr, FILE * fp , int *vertici , bool errore )
     }
 
     
-    // aggiungo un arco tra il vertice del grafo "*vertici" e il nodo appena creato "file_data"
+    // aggiungo archi al nodo gr->adj[vertici] primo ciclo = 0
+    //e passo una viariabile booleana errore impostata inizialmente a false e il nodo appena creato "file_data"
     gr->adj [ *vertici ] = add_archi( file_data, fp, &errore) ;
 
     // libero la variabile per il prossimo utilizzo 
     free( file_data );
     
     
-    // aggiorno il puntatore del vertice 
+    // incremente vertici
     *vertici = *vertici +1;
     
     
@@ -82,8 +79,10 @@ arco add_archi( arco file_data , FILE * fp , bool * errore )
     }
    
     
-    // se la funione fscanf non prende corretamente due numeri  e  il "nodo_t"->key contiene il valore di denominazione fine lista di adiacenza per un certo campo 
-    // libero il nodo "nodo_t" metto il sistema in pausa, setto la variabile d'erroer true e ritono NULL 
+    // condizione per capire se nel file mappa_island.txt sono stati scritti bene i valori dei nodi con peso e distanza
+    // se sopraggiunge un errore, aggiorno la variabile booleana errore a true e ritorno null
+    // la variabile errore serve per fa capire alla funzione che ha chiamato add_archi che si tratta di un errore di scrittura
+    // e non di fine lettura riga
     if ( (fscanf (fp,"%d %d",&file_data->peso, &file_data->lunghezza) != 2 ) && file_data->key != -1 )
     {
         
@@ -103,6 +102,7 @@ arco add_archi( arco file_data , FILE * fp , bool * errore )
     nodo_t->key = file_data->key;
     
     nodo_t->peso = file_data->peso;
+    
     nodo_t->lunghezza = file_data->lunghezza;
 
     // passo induttivo: cerco un nuovo valore da file e richiamo la funzione ricorsivamente 
@@ -117,7 +117,7 @@ arco add_archi( arco file_data , FILE * fp , bool * errore )
 }
 
 
-
+//funzione che mi ritorna i vertici del grafo
 int numero_vertici( grafo gr )
 {
     return gr->numero_vertici;
@@ -149,7 +149,7 @@ void stampa_grafo( grafo gr, int indice )
     stampa_grafo (gr , indice + 1);
 }
 
-
+// funzione che mi avverte se il grafo e' vuoto
 int is_empty(grafo gr) 
 { 
     return ( gr == NULL )? 1 : 0;
@@ -166,48 +166,60 @@ void print_archi ( arco head )
     print_archi ( head->next);
 }
 
+
+// Algoritmo di dijsktra, un algoritmo che ti calcola il min path dalla source al target
+// andando a sommare gli archi dei nodi che va a studiare
 void dijkstra(grafo gr,int source,int target , int peso_veicolo)
 {
     printf("\n");
+    
+    // asseggno  alla variabile total_vertici il totale dei vertici del grafo
     int total_vertici = gr->numero_vertici ;
+    
+    // dichiaro un vettore dist dove andro' a salvare le distanze di tutti i nodi della source
+    int dist [ total_vertici ];
+    
+    // dichiarazione variabili
+    int min_path, start_index, distance;   // minimo per aggiornare il percorso con meno archi, start -> source e la distanza per secondo ciclo while
+    int i = 0, j = 0;           //indici
 
-    //printf("\n%d\n",total_vertici);
-
-    int dist[total_vertici];
-
-    int i = 0, j = 0;
-
-    //non esaminato
+    // vettore prev per salvarmi il path degli indici con dist minore
     int prev [ total_vertici ] ;
     
-    int selected [total_vertici];
+    // vettore utilizzato per capire gli indici toccati
+    int selected [ total_vertici ];
+    
+    // vettore path per stampare il percorso migliore
+    char path [ total_vertici ];
 
-    int min, start, distance;
-
-    char path[total_vertici];
-    //-------------
 
     for( i= 0 ; i< total_vertici ; i++ )
     {
-        selected [ i ] = 0;
-        dist[i] = INT_MAX;
-        prev[i] = -1;
+        selected [ i ] = 0;             // inizializzo selected a 0 o false as u prefer
+        dist[i] = INT_MAX;              // inizializzo dist ad il piu grande valore che puo' assumere un int
+        prev[i] = -1;                   // inizializzo il prev a -1 ( spiegato successivamente a riga 282 )
     }
 
     
-    start = source;
-    selected[start] = 1;
-
-    dist[start] = 0;
+    // inizializzo la variabile start con la source
+    start_index = source;
     
+    // e successivamente imposto l'indice del nodo da esamire a 1 cosi che sia gia controllato
+    selected [ start_index ] = 1;
+    
+    // ovviamente la distanza del vertice A ad un ipotetico A e' sempre uguale a 0 quindi lo inizializzo a tale distanza
+    dist [ start_index ] = 0;
+    
+    // varibile loop per uscire da un ipotetico pozzo ( spiegato a riga 223 )
     int loop = 0;
+    
+    
+    int index_min_path = 0;
 
-    int key_small_island = 0;
 
-
-    while( selected[target] == 0)
+    while( selected [ target ] == 0)
     {
-        min = INT_MAX;
+        min_path = INT_MAX;
 
         if ( loop > total_vertici + 2 ) 
         {
@@ -223,28 +235,28 @@ void dijkstra(grafo gr,int source,int target , int peso_veicolo)
             }
         }
 
-        arco pCrawl = gr->adj[start];
+        arco pCrawl = gr->adj[ start_index ];
 
-        while (pCrawl)
+        while ( pCrawl )
         {
             //printf("%d",pCrawl->key);
 
-            distance = dist[start] + pCrawl->lunghezza;
+            distance = dist[ start_index ] + pCrawl->lunghezza;
 
             //printf(" ++%d_%d_%d++ ", distance, start,pCrawl->key);
             //printf( " %d ", dist[i]);
 
-            if( peso_veicolo <= pCrawl->peso && distance < dist[pCrawl->key] && selected[pCrawl->key] == 0)
+            if( peso_veicolo <= pCrawl->peso && distance < dist [ pCrawl->key ] && selected [ pCrawl->key ] == 0)
             {
-                dist[pCrawl->key] = distance;
-                prev[pCrawl->key] = start;
+                dist [ pCrawl->key ] = distance;
+                prev [ pCrawl->key ] = start_index;
                 //printf(" ? ");
             }
 
-            if( min > dist[pCrawl->key] && selected[pCrawl->key] == 0)
+            if( min_path > dist [ pCrawl->key ] && selected [ pCrawl->key ] == 0)
             {
-                min = dist[pCrawl->key];
-                key_small_island = pCrawl->key;
+                min_path = dist [ pCrawl->key ];
+                index_min_path = pCrawl->key;
                 //printf(" ! ");
             }
 
@@ -263,20 +275,20 @@ void dijkstra(grafo gr,int source,int target , int peso_veicolo)
 
         //printf("\n%d\n",key_small_island);
 
-        start = key_small_island;
-        selected[start] = 1;
+        start_index = index_min_path;
+        selected [ start_index ] = 1;
 
         loop++;
 
     }
 
-    start = target;
+    start_index = target;
     j = 0;
 
     while(start != -1)
     {
         path[j++] = start+65;
-        start = prev[start];
+        start = prev[ start_index ];
     }
 
     path[j]='\0';
