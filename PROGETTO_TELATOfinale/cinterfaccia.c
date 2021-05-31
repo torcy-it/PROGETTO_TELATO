@@ -308,7 +308,8 @@ lista * schermata_ordini ( lista * utente , lista * lista_merce)
 
     }while ( !exit );  
 
-
+    free ( utente );
+    
     if( lista_spesa ) 
     {
         lista_merce = elimina_lista_spesa ( lista_merce, lista_spesa );
