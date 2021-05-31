@@ -95,7 +95,7 @@ void double_password(char *password)
     stampa_intestazione_schermata ( 3 );
 
     // Stampa a video la parola "Password"
-    printf("\tInserire Password:\n\t>");
+    printf("\n\n\tInserire Password:\n\t>");
     // Pulisci buffer
     fflush( stdout );
 
@@ -295,7 +295,7 @@ lista * signin ( lista * head )
     stampa_intestazione_schermata ( 3 );
 
     // Stampa a video "Peso camion" (da sostituire con Digitare Peso camion)
-    printf("\tInserire il Peso camion:\n\t>");
+    printf("\tInserire il Peso camion : ( range consigliato 0 - 100 unita' )\n\t>");
     // Pulisci buffer
     fflush( stdout );
 
@@ -480,16 +480,33 @@ void stampa_schermata_ordini ( int schermata, lista * lista_merce , lista * list
 
     printf("\tDriver : %s %s \n\tPeso totale del veicolo : %d\n\n\n",utente->info_user.name_user, utente->info_user.surname_user, utente->info_user.carico_veivolo);
 
-    printf("\n%c Merce in stock\n",22);
+    printf("\n%c Merce in stock :",22);
 
-    lista_merce ? print_lista_merce ( lista_merce ) : printf("\n\tNessuna merce in stock\n")  ; 
+    if ( lista_merce )
+    {   
+        printf("%10snome%2scolli%2speso\n"," ", " ", " ");
+        print_lista_merce ( lista_merce );
+    }
+    else
+    {
+        printf("\n\tNessuna merce in stock\n")  ; 
+    }
 
-    printf("\n\n%c Lista spesa\n",22);
+    printf("\n\n%c Lista spesa : ",22);
 
-    lista_spesa ? print_lista_merce ( lista_spesa ) : printf("\n\tLista della spesa vuota\n")  ; 
+    if( lista_spesa )
+    {
+        printf("%12snome%2scolli%2speso\n"," ", " ", " ");
+        print_lista_merce ( lista_spesa );
+    }
+    else
+    {
+        printf("\n\tLista della spesa vuota\n")  ; 
+    }
 
     printf("\n\n");
 }
+
 
 int get_char ( int dimensione_da_non_sforare )
 {
@@ -516,13 +533,14 @@ int operazione_nodo_merce ( lista * nodo_merce , lista * del)
 
     int risultato = 0;
 
-    if( (nodo_merce->info_merce.colle * nodo_merce->info_merce.peso) < del->info_user.carico_veivolo )
+    if( (nodo_merce->info_merce.colle * nodo_merce->info_merce.peso) <= del->info_user.carico_veivolo )
     {
         // Se la differenza tra il numero dei colli dell'alimento di del e di head è negativa
-        if ( ( del->info_merce.colle - nodo_merce->info_merce.colle ) < 0 )
+        if ( (nodo_merce->info_merce.colle  - del->info_merce.colle  ) < 0 )
         {
             // Informa l'utente che non è possibile eseguire l'operazione
-            printf("\n\n\t\tNon e' possibile fare questa operazione perche' ( head->info_merce.colle - del->info_merce.colle ) < 0\n\n");
+            printf("\n\n\t\tNon e' possibile fare questa operazione perche' ( head->info_merce.colle - del->info_merce.colle ) < 0\n\n\t\t");
+            system ("pause");
         }
         // Altrimenti
         else
@@ -533,14 +551,14 @@ int operazione_nodo_merce ( lista * nodo_merce , lista * del)
         }
         
     }
-    // Altrimenti
     else
     {
         // Se la differenza tra il numero dei colli dell'alimento head e quello di delè negativa
         if ( (  nodo_merce->info_merce.colle  - del->info_merce.colle  ) < 0 )
         {
             // Informa l'utente che non è possibile eseguire l'operazione
-            printf("\n\n\t\tNon e' possibile fare questa operazione perche ( del->info_merce.colle - head->info_merce.colle ) < 0\n\n");
+            printf("\n\n\t\tNon e' possibile fare questa operazione perche ( del->info_merce.colle - head->info_merce.colle ) < 0\n\n\t\t");
+            system ("pause");
         }
         // Altrimenti
         else

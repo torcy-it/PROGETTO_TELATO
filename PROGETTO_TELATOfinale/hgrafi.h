@@ -2,7 +2,7 @@
 #define HGRAF_H
 
   
-    struct archi
+    typedef struct archi
     {
         int lunghezza;
         int key;
@@ -10,30 +10,26 @@
         int peso; // settare ad 1
         
         struct archi *next;
-    };
-    typedef struct archi * arco;
+    }arco;
 
-    struct graph
+    typedef struct graph
     {
         int numero_vertici; // numero di vertici del grafo 
         struct archi **adj; // vettore con le liste delle adiacenze 
-    };
+    }grafo;
 
+    void dijkstra(grafo * ,int ,int , int );
 
-    typedef struct graph * grafo;
+    void print_archi ( arco *  );
 
-    void dijkstra(grafo ,int ,int , int );
+    void stampa_grafo( grafo * , int );
 
-    void print_archi ( arco  );
+    int is_empty( grafo * ); 
 
-    void stampa_grafo( grafo , int );
+    void create_graph( grafo * , FILE * , int *, bool );
 
-    int is_empty( grafo ); 
+    arco * add_archi( arco *, FILE * , bool * );
 
-    void create_graph( grafo , FILE * , int *, bool );
-
-    arco add_archi( arco , FILE * , bool * );
-
-    int numero_vertici( grafo  );
+    int numero_vertici( grafo * );
 
 #endif

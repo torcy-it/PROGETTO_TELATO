@@ -33,8 +33,8 @@ lista * preleva_user ( FILE * fp )
     lista * nodo_t = (lista *) malloc(sizeof(lista)); //alloco memoria per il nodo
 
     // Se non legge 4 stringhe e 2 interi (è arrivato alla fine del file)
-    if ( fscanf(fp,"%s %s %s %s %d %d", nodo_t->info_user.targaID , nodo_t->info_user.password , nodo_t->info_user.name_user  , nodo_t->info_user.surname_user,
-                 &nodo_t->info_user.peso_veicolo, &nodo_t->info_user.carico_veivolo) != 6 )
+    if ( fscanf(fp,"%s %s %s %s %d %d", nodo_t->info_user.targaID , nodo_t->info_user.password , nodo_t->info_user.name_user  , 
+                                        nodo_t->info_user.surname_user, &nodo_t->info_user.peso_veicolo, &nodo_t->info_user.carico_veivolo) != 6 )
     {
         // Restituisci NULL
         return NULL;
@@ -121,6 +121,7 @@ void load_user (  lista * head , lista * utente )
 
         // Assegna il peso del veicolo dell'utente attuale al peso del veicolo dell'utente passato
         utente->info_user.peso_veicolo = head->info_user.peso_veicolo;
+
         // Annulla il carico del veicolo dell'utente passato
         utente->info_user.carico_veivolo = 0;
         
@@ -158,8 +159,7 @@ bool check_nodo_ID ( lista * head , const char * id_tofind , bool scelta )
         }
                 
     }
-    // Altrimenti controlla il prodotto
-    else
+    else // Altrimenti controlla il prodotto
     {
         // Se c'è una corrispondenza
         if(!strcmp ( head->info_merce.alimento, id_tofind ) )
@@ -198,6 +198,7 @@ bool check_nodo_KEY ( lista * head , const char * targaID, const char * password
 }
 
 // ADD NODE
+// inserimento in coda ricorsivo di una lista
 // Accetta 2 parametri: un puntatore alla testa della lista a cui aggiungere il nodo
 // e il nodo da aggiungere chiamato info_new_user
 lista * add_node ( lista * head, lista * info_new_user )
@@ -264,7 +265,7 @@ void print_lista_merce ( lista * head )
     }
 
     // Stampa il contenuto di un nodo
-    printf("\n%32s %d %d", head->info_merce.alimento, head->info_merce.colle, head->info_merce.peso);
+    printf("\n%32s%4s%3d%4s%2d", head->info_merce.alimento, " ", head->info_merce.colle, " ", head->info_merce.peso);
 
     // Passo ricorsico
     // Passa al nodo successivo
@@ -272,7 +273,7 @@ void print_lista_merce ( lista * head )
 }
 
 // MOD NODO ADD
-// Modifica il contenuto della lista merce in stock a seconda della quantità indicata nel parametro add (che indica l'aggiunta di merce).
+// Modifica il contenuto della passata come paramentro a seconda della quantità indicata nel parametro add (che indica l'aggiunta di merce).
 // found è il parametro che indica se un certo prodotto è presente o meno cosi che arrivato a null so se ho gia modificato la lista else lo aggiungo alla fine
 lista * mod_nodo_add ( lista * head , lista* add, bool found )
 {
@@ -311,7 +312,7 @@ lista * mod_nodo_add ( lista * head , lista* add, bool found )
 }
 
 // MOD NODO DEL
-// Modifica il contenuto della lista merce in stock a seconda della quantità indicata nel parametro del (che indica la rimozione di merce).
+// Modifica il contenuto della lista passata come paramentro a seconda della quantità indicata nel parametro del (che indica la rimozione di merce).
 lista *  mod_nodo_del ( lista * head , lista * del )
 {
     
@@ -511,9 +512,8 @@ void deallocate_list ( lista * head )
     free(head);
 }
 
-// SOMMA ELEMENTI LISTA
-// Calcola il peso del carico
-lista * elimina_lista_spesa ( lista * merce, lista * spesa )
+// aggiorna la lista della merce aggiungendo quello che manca nella lista merce
+lista * aggiorna_lista_merce ( lista * merce, lista * spesa )
 {
     
     if( !spesa )
@@ -524,5 +524,5 @@ lista * elimina_lista_spesa ( lista * merce, lista * spesa )
 
     merce = mod_nodo_add  ( merce , spesa , false);
     
-    elimina_lista_spesa ( merce , spesa->next );
+    aggiorna_lista_merce ( merce , spesa->next );
 }
